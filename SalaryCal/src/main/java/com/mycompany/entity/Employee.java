@@ -25,11 +25,12 @@ public class Employee {
     private int num_of_day;
     private Position positionId;
     private String fullname;
+    private int status;
 
     public Employee() {
     }
 
-    public Employee(int id, String name, String surname, String phone, String address, String identity_fin, String identity_seria, String email, double salary, String salary_day, int num_of_day, Position positionId, String fullname) {
+    public Employee(int id, String name, String surname, String phone, String address, String identity_fin, String identity_seria, String email, double salary, String salary_day, int num_of_day, Position positionId, String fullname, int status) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -43,8 +44,10 @@ public class Employee {
         this.num_of_day = num_of_day;
         this.positionId = positionId;
         this.fullname = fullname;
+        this.status = status;
     }
 
+  
 
 
     public int getId() {
@@ -144,29 +147,38 @@ public class Employee {
     }
 
     public String getFullname() {
-        return fullname;
+        return name+" "+surname;
     }
 
     public void setFullname(String fullname) {
         this.fullname = fullname;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 97 * hash + this.id;
-        hash = 97 * hash + Objects.hashCode(this.name);
-        hash = 97 * hash + Objects.hashCode(this.surname);
-        hash = 97 * hash + Objects.hashCode(this.phone);
-        hash = 97 * hash + Objects.hashCode(this.address);
-        hash = 97 * hash + Objects.hashCode(this.identity_fin);
-        hash = 97 * hash + Objects.hashCode(this.identity_seria);
-        hash = 97 * hash + Objects.hashCode(this.email);
-        hash = 97 * hash + (int) (Double.doubleToLongBits(this.salary) ^ (Double.doubleToLongBits(this.salary) >>> 32));
-        hash = 97 * hash + Objects.hashCode(this.salary_day);
-        hash = 97 * hash + this.num_of_day;
-        hash = 97 * hash + Objects.hashCode(this.positionId);
-        hash = 97 * hash + Objects.hashCode(this.fullname);
+        int hash = 3;
+        hash = 23 * hash + this.id;
+        hash = 23 * hash + Objects.hashCode(this.name);
+        hash = 23 * hash + Objects.hashCode(this.surname);
+        hash = 23 * hash + Objects.hashCode(this.phone);
+        hash = 23 * hash + Objects.hashCode(this.address);
+        hash = 23 * hash + Objects.hashCode(this.identity_fin);
+        hash = 23 * hash + Objects.hashCode(this.identity_seria);
+        hash = 23 * hash + Objects.hashCode(this.email);
+        hash = 23 * hash + (int) (Double.doubleToLongBits(this.salary) ^ (Double.doubleToLongBits(this.salary) >>> 32));
+        hash = 23 * hash + Objects.hashCode(this.salary_day);
+        hash = 23 * hash + this.num_of_day;
+        hash = 23 * hash + Objects.hashCode(this.positionId);
+        hash = 23 * hash + Objects.hashCode(this.fullname);
+        hash = 23 * hash + this.status;
         return hash;
     }
 
@@ -189,6 +201,9 @@ public class Employee {
             return false;
         }
         if (this.num_of_day != other.num_of_day) {
+            return false;
+        }
+        if (this.status != other.status) {
             return false;
         }
         if (!Objects.equals(this.name, other.name)) {
@@ -226,8 +241,10 @@ public class Employee {
 
     @Override
     public String toString() {
-        return "Employee{" + "id=" + id + ", name=" + name + ", surname=" + surname + ", phone=" + phone + ", address=" + address + ", identity_fin=" + identity_fin + ", identity_seria=" + identity_seria + ", email=" + email + ", salary=" + salary + ", salary_day=" + salary_day + ", num_of_day=" + num_of_day + ", positionId=" + positionId + ", fullname=" + fullname + '}';
+        return "Employee{" + "id=" + id + ", name=" + name + ", surname=" + surname + ", phone=" + phone + ", address=" + address + ", identity_fin=" + identity_fin + ", identity_seria=" + identity_seria + ", email=" + email + ", salary=" + salary + ", salary_day=" + salary_day + ", num_of_day=" + num_of_day + ", positionId=" + positionId + ", fullname=" + fullname + ", status=" + status + '}';
     }
+
+   
 
     
     

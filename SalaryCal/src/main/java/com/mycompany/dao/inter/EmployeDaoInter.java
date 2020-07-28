@@ -13,18 +13,21 @@ import java.util.List;
  * @author Virtu
  */
 public interface EmployeDaoInter {
-    
+
     public List<Employee> allList();
-    
+
     public boolean AddEmploye(Employee emp);
-    
+
     public boolean Updateemploye(Employee emp);
-    
+
     public List<Employee> SearchByFullName(String fullName);
-    
+
     public Employee SearchByIdentityFin(String fin);
-    
-    
-    
-    
+
+    public Employee SearchById(int id);
+
+    public Employee SearchByIdentitySeria(String seria);
+
+    public boolean RemoveEmployer(int id);
+
 }
