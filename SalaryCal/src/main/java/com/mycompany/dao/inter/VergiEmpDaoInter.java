@@ -6,6 +6,7 @@
 package com.mycompany.dao.inter;
 
 import com.mycompany.entity.Employee;
+import com.mycompany.entity.Vergi;
 import com.mycompany.entity.VergiEmp;
 import java.util.List;
 
@@ -22,6 +23,10 @@ public interface VergiEmpDaoInter {
     public boolean UpdateVergiEmp(VergiEmp ver);
 
     public boolean RemoveVergiEmp(int id);
+    
+    public VergiEmp SearchById(int id);
+    
+    public VergiEmp SearchEmployeById(int id);
 
     public List<VergiEmp> SearchByFullName(String fullName);
 

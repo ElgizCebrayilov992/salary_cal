@@ -32,6 +32,11 @@ public class VergiEmp {
     public VergiEmp() {
     }
 
+    public VergiEmp(Employee empId, Vergi vergiId) {
+        this.empId = empId;
+        this.vergiId = vergiId;
+    }
+
     public VergiEmp(int id, Employee empId, Vergi vergiId, double gv_200, double ssh_200_gore, double ssh_200dan_yuxari, double ish_200_gore, double itsh_200, double gv_8000, double ssh_8000in200, double ssh_8000dan_qalani, double ish_8000_gore, double itsh_8000_gore, double itsh_8000_elave, double net_salary, int status) {
         this.id = id;
         this.empId = empId;

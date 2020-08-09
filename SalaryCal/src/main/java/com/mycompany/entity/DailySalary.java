@@ -14,26 +14,28 @@ import java.util.Objects;
  */
 public class DailySalary {
     private int id;
-    private Employee empId;
+    private Employee Emp;
     private double bonus;
     private double advance;
     private double penalty;
     private double taken_daily_salary;
     private double daily_salary;
     private Date about_date;
+    private int status;
 
-    public DailySalary(int id, Employee empId, double bonus, double advance, double penalty, double taken_daily_salary, double daily_salary, Date about_date) {
+    public DailySalary() {
+    }
+
+    public DailySalary(int id, Employee Emp, double bonus, double advance, double penalty, double taken_daily_salary, double daily_salary, Date about_date, int status) {
         this.id = id;
-        this.empId = empId;
+        this.Emp = Emp;
         this.bonus = bonus;
         this.advance = advance;
         this.penalty = penalty;
         this.taken_daily_salary = taken_daily_salary;
         this.daily_salary = daily_salary;
         this.about_date = about_date;
-    }
-
-    public DailySalary() {
+        this.status = status;
     }
 
     public int getId() {
@@ -44,12 +46,12 @@ public class DailySalary {
         this.id = id;
     }
 
-    public Employee getEmpId() {
-        return empId;
+    public Employee getEmp() {
+        return Emp;
     }
 
-    public void setEmpId(Employee empId) {
-        this.empId = empId;
+    public void setEmp(Employee Emp) {
+        this.Emp = Emp;
     }
 
     public double getBonus() {
@@ -100,17 +102,26 @@ public class DailySalary {
         this.about_date = about_date;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 53 * hash + this.id;
-        hash = 53 * hash + Objects.hashCode(this.empId);
-        hash = 53 * hash + (int) (Double.doubleToLongBits(this.bonus) ^ (Double.doubleToLongBits(this.bonus) >>> 32));
-        hash = 53 * hash + (int) (Double.doubleToLongBits(this.advance) ^ (Double.doubleToLongBits(this.advance) >>> 32));
-        hash = 53 * hash + (int) (Double.doubleToLongBits(this.penalty) ^ (Double.doubleToLongBits(this.penalty) >>> 32));
-        hash = 53 * hash + (int) (Double.doubleToLongBits(this.taken_daily_salary) ^ (Double.doubleToLongBits(this.taken_daily_salary) >>> 32));
-        hash = 53 * hash + (int) (Double.doubleToLongBits(this.daily_salary) ^ (Double.doubleToLongBits(this.daily_salary) >>> 32));
-        hash = 53 * hash + Objects.hashCode(this.about_date);
+        int hash = 3;
+        hash = 79 * hash + this.id;
+        hash = 79 * hash + Objects.hashCode(this.Emp);
+        hash = 79 * hash + (int) (Double.doubleToLongBits(this.bonus) ^ (Double.doubleToLongBits(this.bonus) >>> 32));
+        hash = 79 * hash + (int) (Double.doubleToLongBits(this.advance) ^ (Double.doubleToLongBits(this.advance) >>> 32));
+        hash = 79 * hash + (int) (Double.doubleToLongBits(this.penalty) ^ (Double.doubleToLongBits(this.penalty) >>> 32));
+        hash = 79 * hash + (int) (Double.doubleToLongBits(this.taken_daily_salary) ^ (Double.doubleToLongBits(this.taken_daily_salary) >>> 32));
+        hash = 79 * hash + (int) (Double.doubleToLongBits(this.daily_salary) ^ (Double.doubleToLongBits(this.daily_salary) >>> 32));
+        hash = 79 * hash + Objects.hashCode(this.about_date);
+        hash = 79 * hash + this.status;
         return hash;
     }
 
@@ -144,7 +155,10 @@ public class DailySalary {
         if (Double.doubleToLongBits(this.daily_salary) != Double.doubleToLongBits(other.daily_salary)) {
             return false;
         }
-        if (!Objects.equals(this.empId, other.empId)) {
+        if (this.status != other.status) {
+            return false;
+        }
+        if (!Objects.equals(this.Emp, other.Emp)) {
             return false;
         }
         if (!Objects.equals(this.about_date, other.about_date)) {
@@ -155,8 +169,8 @@ public class DailySalary {
 
     @Override
     public String toString() {
-        return "DailySalary{" + "id=" + id + ", empId=" + empId + ", bonus=" + bonus + ", advance=" + advance + ", penalty=" + penalty + ", taken_daily_salary=" + taken_daily_salary + ", daily_salary=" + daily_salary + ", about_date=" + about_date + '}';
+        return "DailySalary{" + "id=" + id + ", Emp=" + Emp + ", bonus=" + bonus + ", advance=" + advance + ", penalty=" + penalty + ", taken_daily_salary=" + taken_daily_salary + ", daily_salary=" + daily_salary + ", about_date=" + about_date + ", status=" + status + '}';
     }
-    
+
     
 }

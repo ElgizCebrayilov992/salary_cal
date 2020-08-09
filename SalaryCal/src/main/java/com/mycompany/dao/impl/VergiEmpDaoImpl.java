@@ -14,6 +14,7 @@ import com.mycompany.entity.Position;
 import com.mycompany.entity.Vergi;
 import com.mycompany.entity.VergiEmp;
 import com.mycompany.main.Contex;
+import com.mycompany.util.DailySalaryUtil;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -91,7 +92,7 @@ public class VergiEmpDaoImpl extends AbstractDao implements VergiEmpDaoInter {
 
     @Override
     public boolean AddVergiEmp(VergiEmp ver) {
-        VergiEmp ve = vergiNet(ver);
+        VergiEmp ve = DailySalaryUtil.vergiNet(ver);
         System.out.println("BURDA: " + ve.getIsh_200_gore());
 
         VergiDaoInter vdi = Contex.instanceVergiDao();
@@ -187,87 +188,7 @@ public class VergiEmpDaoImpl extends AbstractDao implements VergiEmpDaoInter {
 
     }
 
-    private VergiEmp vergiNet(VergiEmp ver) {
-
-        EmployeDaoInter edi = Contex.instanceEmployeeDao();
-        Employee emp = edi.SearchById(ver.getEmpId().getId());
-        System.out.println("BURda 2: " + emp);
-
-        VergiDaoInter vgi = Contex.instanceVergiDao();
-        Vergi v = vgi.SearchById(ver.getVergiId().getId());
-        System.out.println("BURda 3: " + v);
-
-        VergiEmp ve = new VergiEmp();
-        ve.setEmpId(emp);
-        ve.setVergiId(v);
-        ve.setStatus(1);
-
-        double salary = emp.getSalary();
-        double max = v.getSalary_max();
-        double minSalary = v.getSalary_min();
-        if (salary < max) {
-
-            double gv = 0;
-            ve.setGv_200(0);
-
-            double min = (v.getSalary_min() * v.getSsh_200_gore()) / 100;
-            ve.setSsh_200_gore(min);
-            System.out.println("BURDA MIN: " + min);
-
-            double other = ((emp.getSalary() - v.getSalary_min()) * v.getSsh_200dan_yuxari()) / 100;
-            ve.setSsh_200dan_yuxari(other);
-            //System.out.println(other);
-            double ssh = min + other;
-
-            double ish = (emp.getSalary() * v.getIsh_200_gore()) / 100;
-            ve.setIsh_200_gore(ish);
-
-            double itsh = (emp.getSalary() * v.getItsh_200()) / 100;
-            ve.setItsh_200(itsh);
-
-            ve.setGv_8000(0);
-            ve.setSsh_8000in200(0);
-            ve.setSsh_8000dan_qalani(0);
-            ve.setIsh_8000_gore(0);
-            ve.setItsh_8000_gore(0);
-            ve.setItsh_8000_elave(0);
-
-            double net_Salary = emp.getSalary() - (gv + min + other + ish + itsh);
-            ve.setNet_salary(net_Salary);
-
-        }
-        if (salary > max) {
-
-            ve.setGv_200(0);
-            ve.setSsh_200_gore(0);
-            ve.setSsh_200dan_yuxari(0);
-            ve.setIsh_200_gore(0);
-            ve.setItsh_200(0);
-
-            double gv = ((emp.getSalary() - v.getSalary_max()) * v.getGv_8000()) / 100;
-            ve.setGv_8000(gv);
-
-            double ssh200 = (v.getSalary_min() * v.getSsh_8000in200()) / 100;
-            ve.setSsh_8000in200(ssh200);
-
-            double sshQalani = ((emp.getSalary() - v.getSalary_min()) * v.getSsh_8000dan_qalani()) / 100;
-            ve.setSsh_8000dan_qalani(sshQalani);
-
-            double ish = (emp.getSalary() * v.getIsh_8000_gore()) / 100;
-            ve.setIsh_8000_gore(ish);
-
-            double itsh8000gore = (v.getSalary_max() * v.getItsh_8000_gore()) / 100;
-            ve.setItsh_8000_gore(itsh8000gore);
-
-            double itsh_8000_elave = ((emp.getSalary() - v.getSalary_max()) * v.getItsh_8000_elave()) / 100;
-            ve.setItsh_8000_elave(itsh_8000_elave);
-
-            double net_Salary = emp.getSalary() - (gv + ssh200 + sshQalani + ish + itsh8000gore + itsh_8000_elave);
-            ve.setNet_salary(net_Salary);
-        }
-
-        return ve;
-    }
+    
 
     @Override
     public List<VergiEmp> SearchByFullName(String fullName) {
@@ -301,4 +222,63 @@ public class VergiEmpDaoImpl extends AbstractDao implements VergiEmpDaoInter {
         return list;
 
     }
+
+    @Override
+    public VergiEmp SearchById(int id) {
+     VergiEmp emp = null;
+
+        try (Connection c = connection()) {
+            Statement stm = c.createStatement();
+            stm.execute("SELECT\n"
+                    + "	ve.*,\n"
+                    + "	ae.full_name,\n"
+                    + "	ae.salary \n"
+                    + "FROM\n"
+                    + "	vergi_emp ve\n"
+                    + "	LEFT JOIN about_employee ae ON ae.id = ve.employe_id\n"
+                    + "	LEFT JOIN vergi v ON v.id = ve.id WHERE ve.id ="+id);
+            ResultSet rs = stm.getResultSet();
+            while (rs.next()) {
+                emp = getVergiEmp(rs);
+
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return emp;  
+    
+    }
+
+    @Override
+    public VergiEmp SearchEmployeById(int id) {
+
+        VergiEmp emp = null;
+
+        try (Connection c = connection()) {
+            Statement stm = c.createStatement();
+            stm.execute("SELECT\n"
+                    + "	ve.*,\n"
+                    + "	ae.full_name,\n"
+                    + "	ae.salary \n"
+                    + "FROM\n"
+                    + "	vergi_emp ve\n"
+                    + "	LEFT JOIN about_employee ae ON ae.id = ve.employe_id\n"
+                    + "	LEFT JOIN vergi v ON v.id = ve.id WHERE ve.employe_id ="+id);
+            ResultSet rs = stm.getResultSet();
+            while (rs.next()) {
+                emp = getVergiEmp(rs);
+
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return emp;
+
+    }
+    
+    
 }

@@ -13,15 +13,15 @@ import java.util.List;
  * @author Virtu
  */
 public interface VergiDaoInter {
-    
+
     public List<Vergi> allList();
-    
+
     public boolean AddVergi(Vergi ver);
-    
+
     public boolean UpdateVergi(Vergi ver);
-    
-     public Vergi SearchById(int id);
-          
-    public boolean  RemoveVergi(int id);
-    
+
+    public Vergi SearchById(int id);
+
+    public boolean RemoveVergi(int id);
+
 }
