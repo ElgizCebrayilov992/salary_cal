@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.util;
+package com.mycompany.config;
 
 import com.mycompany.dao.inter.DailySalaryDaoInter;
 import com.mycompany.dao.inter.EmployeDaoInter;
@@ -11,33 +11,30 @@ import com.mycompany.dao.inter.VergiDaoInter;
 import com.mycompany.dao.inter.VergiEmpDaoInter;
 import com.mycompany.entity.DailySalary;
 import com.mycompany.entity.Employee;
-import com.mycompany.entity.MonthDa;
+import com.mycompany.entity.MonthDate;
 import com.mycompany.entity.Vergi;
 import com.mycompany.entity.VergiEmp;
 import com.mycompany.main.Contex;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Virtu
  */
-public class DailySalaryUtil {
+public class Config {
 
     private static final DailySalaryDaoInter dsdi = Contex.instanceDailySalaryDao();
     private static final EmployeDaoInter edi = Contex.instanceEmployeeDao();
     private static final VergiEmpDaoInter vedi = Contex.instanceVergiEmpDao();
+    private static final SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
 
-    public static void AddDailySalary() {
+    public static void addDailySalary(java.sql.Date sqlDate) {
 
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date d = new java.util.Date();
-        String zaman = df.format(d);
+        String zaman = sdf1.format(d);
 
         List<Employee> empList = null;
         List<DailySalary> dList = null;
@@ -47,95 +44,75 @@ public class DailySalaryUtil {
         dList = dsdi.allGet();
 
         if (dList.isEmpty()) {
-            addUser();
+            searchEmployer(sqlDate);
+            System.out.println("1");
         }
 
         if (!dList.isEmpty()) {
 
             if (dl.isEmpty()) {
-                addUser();
+                searchEmployer(sqlDate);
+                System.out.println("2");
             }
         }
         for (Employee emp : empList) {
-            DailySalary ds = dsdi.SearchByFullNameAndDate(emp.getFullname(), zaman);
+            DailySalary ds = dsdi.SearchByFinAndSeriaAndDate(emp.getIdentity_fin(), emp.getIdentity_seria(), zaman);
             if (ds == null) {
-                System.out.println(emp);
-                AddUser2(emp);
+
+                System.out.println("3");
+                Config.addDailySalary(emp,sqlDate);
             }
 
         }
     }
 
-    private static void addUser() {
-
-        double guneDusenPul = 0;
+    private static void searchEmployer(java.sql.Date sqlDate) {
 
         List<Employee> empList = null;
-        empList = edi.allList();
+        empList = edi.allListStatus();
 
         for (Employee emps : empList) {
             if (emps.getStatus() == 1) {
-                AddUser2(emps);
+                Config.addDailySalary(emps,sqlDate);
             }
 
         }
 
     }
 
-    private static void AddUser2(Employee emp) {
-        System.out.println("EMp2: " + emp);
-        MonthDa md = GetMonthDaysUtil.getMonthDay();
-        int day = md.getDay();
+    private static void addDailySalary(Employee emp,java.sql.Date sqlDate) {
 
-        Calendar now = Calendar.getInstance();
-        int day2 = now.get(Calendar.DATE);
-        int year = now.get(Calendar.YEAR);
-        int month = now.get(Calendar.MONTH) + 1;
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        java.util.Date d = new java.util.Date();
-        String zaman = df.format(d);
+        MonthDate md = FindMonthAllDay.getDaily();
+        int day = md.getDay();
 
         double guneDusenPul = 0;
 
-//        List<Employee> empList = null;
-//        empList = edi.allList();
         List<DailySalary> dList = null;
         dList = dsdi.allGet();
 
         VergiEmp ve = vedi.SearchEmployeById(emp.getId());
-        System.out.println("VERGIEMP: " + ve);
-        System.out.println("EMP ID: " + emp.getId());
+
         double daily_salary = ve.getNet_salary() / day;
 
-        double bonus = 0;
-        double advance = 0;
-        double penalty = 0;
-        double taken_daily_salary = 0;
+        double bonus = 12;
+        double advance = 14.5;
+        double penalty = 3;
+        double taken_daily_salary = 9;
         int status = 1;
 
-        try {
-            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
-            java.util.Date date = sdf1.parse(zaman);
-            System.out.println("parse date: " + date);
-            java.sql.Date about_date = new java.sql.Date(date.getTime());
+        java.sql.Date about_date = new java.sql.Date(utilDate().getTime());
 
-            DailySalary ds = new DailySalary(0, emp, bonus, advance, penalty, taken_daily_salary, daily_salary, about_date, status);
-            dsdi.AddDailySalary(ds);
-        } catch (ParseException ex) {
-            Logger.getLogger(DailySalaryUtil.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        DailySalary ds = new DailySalary(0, emp, bonus, advance, penalty, taken_daily_salary, daily_salary, sqlDate, status);
+        dsdi.AddDailySalary(ds);
 
     }
 
     public static VergiEmp vergiNet(VergiEmp ver) {
 
-        EmployeDaoInter edi = Contex.instanceEmployeeDao();
         Employee emp = edi.SearchById(ver.getEmpId().getId());
-        System.out.println("BURda 2: " + emp);
 
         VergiDaoInter vgi = Contex.instanceVergiDao();
         Vergi v = vgi.SearchById(ver.getVergiId().getId());
-        System.out.println("BURda 3: " + v);
 
         VergiEmp ve = new VergiEmp();
         ve.setEmpId(emp);
@@ -152,7 +129,6 @@ public class DailySalaryUtil {
 
             double min = (v.getSalary_min() * v.getSsh_200_gore()) / 100;
             ve.setSsh_200_gore(min);
-            System.out.println("BURDA MIN: " + min);
 
             double other = ((emp.getSalary() - v.getSalary_min()) * v.getSsh_200dan_yuxari()) / 100;
             ve.setSsh_200dan_yuxari(other);
@@ -208,4 +184,74 @@ public class DailySalaryUtil {
 
         return ve;
     }
+
+    public static String getDateNow() {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date d = new java.util.Date();
+        String date = df.format(d);
+        return date;
+    }
+
+    private static Date utilDate() {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date d = new java.util.Date();
+        return d;
+    }
+
+    public static void addMonthlySalary() {
+        System.out.println("Ayliq Maas ise dusdu");
+        List<Employee> listEmp = edi.allListStatus();
+        for (Employee employee : listEmp) {
+            if (employee.getPayType().getValue().equals("a")) {
+                System.out.println("Ayliq maasa girildi");
+                addTamAy(employee);
+
+            }
+        }
+
+    }
+
+    private static void addTamAy(Employee employee) {
+        System.out.println("Tam ayin icindedi");
+
+        String startDate = String.valueOf(employee.getSend_salary_day());
+        System.out.println("StartDate: "+startDate);
+        String endDate = getDateNow();
+        System.out.println("endDate: "+endDate);
+
+        char[] startChary = startDate.toCharArray();
+        String start = startChary[8] + "" + startChary[9];
+        System.out.println("Star: "+start);
+
+        char[] endChary = endDate.toCharArray();
+        String end = endChary[8] + "" + endChary[9];
+        System.out.println("End: "+end);
+
+        int id = employee.getId();
+
+        double bonus = 0;
+        double advance = 0;
+        double penalty = 0;
+        double take_salary = 0;
+        double daily_salary = 0;
+
+        if (start.equals(end)) {
+            System.out.println("Baslangic ve indiki zaman yoxlanildi ve kecdi");
+
+            List<DailySalary> listDs = dsdi.SearchByDateRanger(id, startDate, endDate);
+            for (DailySalary listD : listDs) {
+                System.out.println("Forun icindeyik");
+                bonus = bonus + listD.getBonus();
+                advance = advance + listD.getAdvance();
+                penalty = penalty + listD.getPenalty();
+                take_salary = take_salary + listD.getTaken_daily_salary();
+                daily_salary = daily_salary + listD.getDaily_salary();
+            }
+
+        }
+        System.out.println("Bonus: "+bonus+" Advance: "+advance+" Penalty: "+penalty+" Take Salary: "+take_salary+
+                " Dail Salary: "+daily_salary);
+
+    }
+
 }

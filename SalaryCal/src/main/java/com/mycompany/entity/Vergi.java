@@ -28,11 +28,12 @@ public class Vergi {
    private int status;
    private double salary_max;
    private double salary_min;
+   private double gelmediyi_is_gunun_cermesi;
 
     public Vergi() {
     }
 
-    public Vergi(int id, String name, double gv_200, double ssh_200_gore, double ssh_200dan_yuxari, double ish_200_gore, double itsh_200, double gv_8000, double ssh_8000in200, double ssh_8000dan_qalani, double ish_8000_gore, double itsh_8000_gore, double itsh_8000_elave, int status, double salary_max, double salary_min) {
+    public Vergi(int id, String name, double gv_200, double ssh_200_gore, double ssh_200dan_yuxari, double ish_200_gore, double itsh_200, double gv_8000, double ssh_8000in200, double ssh_8000dan_qalani, double ish_8000_gore, double itsh_8000_gore, double itsh_8000_elave, int status, double salary_max, double salary_min, double gelmediyi_is_gunun_cermesi) {
         this.id = id;
         this.name = name;
         this.gv_200 = gv_200;
@@ -49,7 +50,10 @@ public class Vergi {
         this.status = status;
         this.salary_max = salary_max;
         this.salary_min = salary_min;
+        this.gelmediyi_is_gunun_cermesi = gelmediyi_is_gunun_cermesi;
     }
+
+    
 
     public int getId() {
         return id;
@@ -179,25 +183,34 @@ public class Vergi {
         this.salary_min = salary_min;
     }
 
+    public double getGelmediyi_is_gunun_cermesi() {
+        return gelmediyi_is_gunun_cermesi;
+    }
+
+    public void setGelmediyi_is_gunun_cermesi(double gelmediyi_is_gunun_cermesi) {
+        this.gelmediyi_is_gunun_cermesi = gelmediyi_is_gunun_cermesi;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 59 * hash + this.id;
-        hash = 59 * hash + Objects.hashCode(this.name);
-        hash = 59 * hash + (int) (Double.doubleToLongBits(this.gv_200) ^ (Double.doubleToLongBits(this.gv_200) >>> 32));
-        hash = 59 * hash + (int) (Double.doubleToLongBits(this.ssh_200_gore) ^ (Double.doubleToLongBits(this.ssh_200_gore) >>> 32));
-        hash = 59 * hash + (int) (Double.doubleToLongBits(this.ssh_200dan_yuxari) ^ (Double.doubleToLongBits(this.ssh_200dan_yuxari) >>> 32));
-        hash = 59 * hash + (int) (Double.doubleToLongBits(this.ish_200_gore) ^ (Double.doubleToLongBits(this.ish_200_gore) >>> 32));
-        hash = 59 * hash + (int) (Double.doubleToLongBits(this.itsh_200) ^ (Double.doubleToLongBits(this.itsh_200) >>> 32));
-        hash = 59 * hash + (int) (Double.doubleToLongBits(this.gv_8000) ^ (Double.doubleToLongBits(this.gv_8000) >>> 32));
-        hash = 59 * hash + (int) (Double.doubleToLongBits(this.ssh_8000in200) ^ (Double.doubleToLongBits(this.ssh_8000in200) >>> 32));
-        hash = 59 * hash + (int) (Double.doubleToLongBits(this.ssh_8000dan_qalani) ^ (Double.doubleToLongBits(this.ssh_8000dan_qalani) >>> 32));
-        hash = 59 * hash + (int) (Double.doubleToLongBits(this.ish_8000_gore) ^ (Double.doubleToLongBits(this.ish_8000_gore) >>> 32));
-        hash = 59 * hash + (int) (Double.doubleToLongBits(this.itsh_8000_gore) ^ (Double.doubleToLongBits(this.itsh_8000_gore) >>> 32));
-        hash = 59 * hash + (int) (Double.doubleToLongBits(this.itsh_8000_elave) ^ (Double.doubleToLongBits(this.itsh_8000_elave) >>> 32));
-        hash = 59 * hash + this.status;
-        hash = 59 * hash + (int) (Double.doubleToLongBits(this.salary_max) ^ (Double.doubleToLongBits(this.salary_max) >>> 32));
-        hash = 59 * hash + (int) (Double.doubleToLongBits(this.salary_min) ^ (Double.doubleToLongBits(this.salary_min) >>> 32));
+        int hash = 5;
+        hash = 97 * hash + this.id;
+        hash = 97 * hash + Objects.hashCode(this.name);
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.gv_200) ^ (Double.doubleToLongBits(this.gv_200) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.ssh_200_gore) ^ (Double.doubleToLongBits(this.ssh_200_gore) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.ssh_200dan_yuxari) ^ (Double.doubleToLongBits(this.ssh_200dan_yuxari) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.ish_200_gore) ^ (Double.doubleToLongBits(this.ish_200_gore) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.itsh_200) ^ (Double.doubleToLongBits(this.itsh_200) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.gv_8000) ^ (Double.doubleToLongBits(this.gv_8000) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.ssh_8000in200) ^ (Double.doubleToLongBits(this.ssh_8000in200) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.ssh_8000dan_qalani) ^ (Double.doubleToLongBits(this.ssh_8000dan_qalani) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.ish_8000_gore) ^ (Double.doubleToLongBits(this.ish_8000_gore) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.itsh_8000_gore) ^ (Double.doubleToLongBits(this.itsh_8000_gore) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.itsh_8000_elave) ^ (Double.doubleToLongBits(this.itsh_8000_elave) >>> 32));
+        hash = 97 * hash + this.status;
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.salary_max) ^ (Double.doubleToLongBits(this.salary_max) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.salary_min) ^ (Double.doubleToLongBits(this.salary_min) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.gelmediyi_is_gunun_cermesi) ^ (Double.doubleToLongBits(this.gelmediyi_is_gunun_cermesi) >>> 32));
         return hash;
     }
 
@@ -258,6 +271,9 @@ public class Vergi {
         if (Double.doubleToLongBits(this.salary_min) != Double.doubleToLongBits(other.salary_min)) {
             return false;
         }
+        if (Double.doubleToLongBits(this.gelmediyi_is_gunun_cermesi) != Double.doubleToLongBits(other.gelmediyi_is_gunun_cermesi)) {
+            return false;
+        }
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }
@@ -266,9 +282,13 @@ public class Vergi {
 
     @Override
     public String toString() {
-        return "Vergi{" + "id=" + id + ", name=" + name + ", gv_200=" + gv_200 + ", ssh_200_gore=" + ssh_200_gore + ", ssh_200dan_yuxari=" + ssh_200dan_yuxari + ", ish_200_gore=" + ish_200_gore + ", itsh_200=" + itsh_200 + ", gv_8000=" + gv_8000 + ", ssh_8000in200=" + ssh_8000in200 + ", ssh_8000dan_qalani=" + ssh_8000dan_qalani + ", ish_8000_gore=" + ish_8000_gore + ", itsh_8000_gore=" + itsh_8000_gore + ", itsh_8000_elave=" + itsh_8000_elave + ", status=" + status + ", salary_max=" + salary_max + ", salary_min=" + salary_min + '}';
+        return "Vergi{" + "id=" + id + ", name=" + name + ", gv_200=" + gv_200 + ", ssh_200_gore=" + ssh_200_gore + ", ssh_200dan_yuxari=" + ssh_200dan_yuxari + ", ish_200_gore=" + ish_200_gore + ", itsh_200=" + itsh_200 + ", gv_8000=" + gv_8000 + ", ssh_8000in200=" + ssh_8000in200 + ", ssh_8000dan_qalani=" + ssh_8000dan_qalani + ", ish_8000_gore=" + ish_8000_gore + ", itsh_8000_gore=" + itsh_8000_gore + ", itsh_8000_elave=" + itsh_8000_elave + ", status=" + status + ", salary_max=" + salary_max + ", salary_min=" + salary_min + ", gelmediyi_is_gunun_cermesi=" + gelmediyi_is_gunun_cermesi + '}';
     }
+    
+    
 
    
+
+    
    
 }

@@ -5,6 +5,7 @@
  */
 package com.mycompany.entity;
 
+import java.sql.Date;
 import java.util.Objects;
 
 /**
@@ -12,6 +13,7 @@ import java.util.Objects;
  * @author Virtu
  */
 public class Employee {
+
     private int id;
     private String name;
     private String surname;
@@ -21,16 +23,19 @@ public class Employee {
     private String identity_seria;
     private String email;
     private double salary;
-    private String salary_day;
+    private Date job_start;
     private int num_of_day;
     private Position positionId;
     private String fullname;
     private int status;
+    private PayType payType;
+    private Date job_end;
+    private Date send_salary_day;
 
     public Employee() {
     }
 
-    public Employee(int id, String name, String surname, String phone, String address, String identity_fin, String identity_seria, String email, double salary, String salary_day, int num_of_day, Position positionId, String fullname, int status) {
+    public Employee(int id, String name, String surname, String phone, String address, String identity_fin, String identity_seria, String email, double salary, Date job_start, int num_of_day, Position positionId, String fullname, int status, PayType payType, Date job_end, Date send_salary_day) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -40,15 +45,18 @@ public class Employee {
         this.identity_seria = identity_seria;
         this.email = email;
         this.salary = salary;
-        this.salary_day = salary_day;
+        this.job_start = job_start;
         this.num_of_day = num_of_day;
         this.positionId = positionId;
         this.fullname = fullname;
         this.status = status;
+       
+        this.payType = payType;
+        this.job_end = job_end;
+        this.send_salary_day = send_salary_day;
     }
 
-  
-
+    
 
     public int getId() {
         return id;
@@ -122,12 +130,12 @@ public class Employee {
         this.salary = salary;
     }
 
-    public String getSalary_day() {
-        return salary_day;
+    public Date getJob_start() {
+        return job_start;
     }
 
-    public void setSalary_day(String salary_day) {
-        this.salary_day = salary_day;
+    public void setJob_start(Date job_start) {
+        this.job_start = job_start;
     }
 
     public int getNum_of_day() {
@@ -147,7 +155,7 @@ public class Employee {
     }
 
     public String getFullname() {
-        return name+" "+surname;
+        return fullname;
     }
 
     public void setFullname(String fullname) {
@@ -162,23 +170,51 @@ public class Employee {
         this.status = status;
     }
 
+    public PayType getPayType() {
+        return payType;
+    }
+
+    public void setPayType(PayType payType) {
+        this.payType = payType;
+    }
+
+    public Date getJob_end() {
+        return job_end;
+    }
+
+    public void setJob_end(Date job_end) {
+        this.job_end = job_end;
+    }
+
+    public Date getSend_salary_day() {
+        return send_salary_day;
+    }
+
+    public void setSend_salary_day(Date send_salary_day) {
+        this.send_salary_day = send_salary_day;
+    }
+
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 23 * hash + this.id;
-        hash = 23 * hash + Objects.hashCode(this.name);
-        hash = 23 * hash + Objects.hashCode(this.surname);
-        hash = 23 * hash + Objects.hashCode(this.phone);
-        hash = 23 * hash + Objects.hashCode(this.address);
-        hash = 23 * hash + Objects.hashCode(this.identity_fin);
-        hash = 23 * hash + Objects.hashCode(this.identity_seria);
-        hash = 23 * hash + Objects.hashCode(this.email);
-        hash = 23 * hash + (int) (Double.doubleToLongBits(this.salary) ^ (Double.doubleToLongBits(this.salary) >>> 32));
-        hash = 23 * hash + Objects.hashCode(this.salary_day);
-        hash = 23 * hash + this.num_of_day;
-        hash = 23 * hash + Objects.hashCode(this.positionId);
-        hash = 23 * hash + Objects.hashCode(this.fullname);
-        hash = 23 * hash + this.status;
+        hash = 43 * hash + this.id;
+        hash = 43 * hash + Objects.hashCode(this.name);
+        hash = 43 * hash + Objects.hashCode(this.surname);
+        hash = 43 * hash + Objects.hashCode(this.phone);
+        hash = 43 * hash + Objects.hashCode(this.address);
+        hash = 43 * hash + Objects.hashCode(this.identity_fin);
+        hash = 43 * hash + Objects.hashCode(this.identity_seria);
+        hash = 43 * hash + Objects.hashCode(this.email);
+        hash = 43 * hash + (int) (Double.doubleToLongBits(this.salary) ^ (Double.doubleToLongBits(this.salary) >>> 32));
+        hash = 43 * hash + Objects.hashCode(this.job_start);
+        hash = 43 * hash + this.num_of_day;
+        hash = 43 * hash + Objects.hashCode(this.positionId);
+        hash = 43 * hash + Objects.hashCode(this.fullname);
+        hash = 43 * hash + this.status;
+       
+        hash = 43 * hash + Objects.hashCode(this.payType);
+        hash = 43 * hash + Objects.hashCode(this.job_end);
+        hash = 43 * hash + Objects.hashCode(this.send_salary_day);
         return hash;
     }
 
@@ -206,6 +242,7 @@ public class Employee {
         if (this.status != other.status) {
             return false;
         }
+        
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }
@@ -227,13 +264,22 @@ public class Employee {
         if (!Objects.equals(this.email, other.email)) {
             return false;
         }
-        if (!Objects.equals(this.salary_day, other.salary_day)) {
-            return false;
-        }
         if (!Objects.equals(this.fullname, other.fullname)) {
             return false;
         }
+        if (!Objects.equals(this.job_start, other.job_start)) {
+            return false;
+        }
         if (!Objects.equals(this.positionId, other.positionId)) {
+            return false;
+        }
+        if (!Objects.equals(this.payType, other.payType)) {
+            return false;
+        }
+        if (!Objects.equals(this.job_end, other.job_end)) {
+            return false;
+        }
+        if (!Objects.equals(this.send_salary_day, other.send_salary_day)) {
             return false;
         }
         return true;
@@ -241,14 +287,7 @@ public class Employee {
 
     @Override
     public String toString() {
-        return "Employee{" + "id=" + id + ", name=" + name + ", surname=" + surname + ", phone=" + phone + ", address=" + address + ", identity_fin=" + identity_fin + ", identity_seria=" + identity_seria + ", email=" + email + ", salary=" + salary + ", salary_day=" + salary_day + ", num_of_day=" + num_of_day + ", positionId=" + positionId + ", fullname=" + fullname + ", status=" + status + '}';
+        return "Employee{" + "id=" + id + ", name=" + name + ", surname=" + surname + ", phone=" + phone + ", address=" + address + ", identity_fin=" + identity_fin + ", identity_seria=" + identity_seria + ", email=" + email + ", salary=" + salary + ", job_start=" + job_start + ", num_of_day=" + num_of_day + ", positionId=" + positionId + ", fullname=" + fullname + ", status=" + status  + ", payType=" + payType + ", job_end=" + job_end + ", send_salary_day=" + send_salary_day + '}';
     }
 
-   
-
-    
-    
-    
-    
-    
 }

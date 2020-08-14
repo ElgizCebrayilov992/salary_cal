@@ -3,20 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.util;
+package com.mycompany.config;
 
-import com.mycompany.entity.MonthDa;
+import com.mycompany.entity.MonthDate;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Scanner;
 
 /**
  *
  * @author Virtu
  */
-public class GetMonthDaysUtil {
+public class FindMonthAllDay {
 
-    public static MonthDa getMonthDay() {
+    public static MonthDate getDaily() {
         Calendar now = Calendar.getInstance();
         String ayAdi = "Unknown";
         int gun = 0;
@@ -78,10 +76,11 @@ public class GetMonthDaysUtil {
                 ayAdi = "December";
                 gun = 31;
         }
-     
 
-        return new MonthDa(gun, month, year);
+        return new MonthDate(gun, month, year);
 
     }
+
+    
 
 }

@@ -40,9 +40,10 @@ public class VergiDaoImpl extends AbstractDao implements VergiDaoInter {
         int status = rs.getInt("status");
         double salary_max = rs.getDouble("salary_max");
         double salary_min = rs.getDouble("salary_min");
+        double gelmediyi_is_gunun_cermesi = rs.getDouble("gelmediyi_is_gunun_cermesi");
 
         return new Vergi(id, name, gv_200, ssh_200_gore, ssh_200dan_yuxari, ish_200_gore, itsh_200, gv_8000,
-                ssh_8000in200, ssh_8000qalani, itsh_8000_gore, itsh_8000_gore, itsh_8000_gore,status,salary_max,salary_min);
+                ssh_8000in200, ssh_8000qalani, itsh_8000_gore, itsh_8000_gore, itsh_8000_gore,status,salary_max,salary_min,gelmediyi_is_gunun_cermesi);
 
     }
 
@@ -73,7 +74,7 @@ public class VergiDaoImpl extends AbstractDao implements VergiDaoInter {
        try(Connection c=connection()) {
             PreparedStatement ps=c.prepareStatement("INSERT INTO vergi (`name`,gv_200,ssh_200_gore,"
                     + "ssh_200dan_yuxari,ish_200_gore,itsh_200,gv_8000,ssh_8000in200,"
-                    + "ssh_8000qalani,ish_8000,itsh_8000_gore,itsh_8000_elave,status,salary_max,salary_min) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                    + "ssh_8000qalani,ish_8000,itsh_8000_gore,itsh_8000_elave,status,salary_max,salary_min,gelmediyi_is_gunun_cermesi) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             ps.setString(1, u.getName());         
             ps.setDouble(2, u.getGv_200());
             ps.setDouble(3, u.getSsh_200_gore());
@@ -89,6 +90,7 @@ public class VergiDaoImpl extends AbstractDao implements VergiDaoInter {
             ps.setInt(13, u.getStatus());         
             ps.setDouble(14, u.getSalary_max());
             ps.setDouble(15, u.getSalary_min());
+            ps.setDouble(16, u.getGelmediyi_is_gunun_cermesi());
  
             
              ps.execute();
@@ -108,7 +110,7 @@ public class VergiDaoImpl extends AbstractDao implements VergiDaoInter {
             PreparedStatement ps = c.prepareStatement("update vergi set "
                     + "`name`=?,gv_200=?,ssh_200_gore=?,"
                     + "ssh_200dan_yuxari=?,ish_200_gore=?,itsh_200=?,gv_8000=?,ssh_8000in200=?,"
-                    + "ssh_8000qalani=?,ish_8000=?,itsh_8000_gore=?,itsh_8000_elave=?,status=?,salary_max=?,salary_min=? where id=?");
+                    + "ssh_8000qalani=?,ish_8000=?,itsh_8000_gore=?,itsh_8000_elave=?,status=?,salary_max=?,salary_min=?,gelmediyi_is_gunun_cermesi=? where id=?");
             ps.setString(1, u.getName());
             ps.setDouble(2, u.getGv_200());
             ps.setDouble(3, u.getSsh_200_gore());
@@ -124,7 +126,8 @@ public class VergiDaoImpl extends AbstractDao implements VergiDaoInter {
             ps.setInt(13, u.getStatus());
             ps.setDouble(14, u.getSalary_max());
             ps.setDouble(15, u.getSalary_min());
-            ps.setInt(16, u.getId());
+            ps.setDouble(16, u.getGelmediyi_is_gunun_cermesi());
+            ps.setInt(17, u.getId());
             ps.execute();
         } catch (Exception e) {
             System.out.println(e.getMessage());

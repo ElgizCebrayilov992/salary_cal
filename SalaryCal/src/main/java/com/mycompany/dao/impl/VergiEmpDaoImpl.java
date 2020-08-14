@@ -6,15 +6,13 @@
 package com.mycompany.dao.impl;
 
 import com.mycompany.dao.inter.AbstractDao;
-import com.mycompany.dao.inter.EmployeDaoInter;
 import com.mycompany.dao.inter.VergiDaoInter;
 import com.mycompany.dao.inter.VergiEmpDaoInter;
 import com.mycompany.entity.Employee;
-import com.mycompany.entity.Position;
 import com.mycompany.entity.Vergi;
 import com.mycompany.entity.VergiEmp;
 import com.mycompany.main.Contex;
-import com.mycompany.util.DailySalaryUtil;
+import com.mycompany.config.Config;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,8 +39,10 @@ public class VergiEmpDaoImpl extends AbstractDao implements VergiEmpDaoInter {
         emp.setSalary(salary);
 
         int vergi_id = rs.getInt("vergi_id");
+        //double gelmediyi_is_gunun_cermesi = rs.getDouble("gelmediyi_is_gunun_cermesi");
         Vergi ver = new Vergi();
         ver.setId(vergi_id);
+       // ver.setGelmediyi_is_gunun_cermesi(gelmediyi_is_gunun_cermesi);
 
         double gv_200 = rs.getDouble("gv_200");
         double ssh_200_gore = rs.getDouble("ssh_200_gore");
@@ -68,11 +68,12 @@ public class VergiEmpDaoImpl extends AbstractDao implements VergiEmpDaoInter {
         String sql = "SELECT\n"
                 + "	ve.*,\n"
                 + "	ae.full_name,\n"
-                + "	ae.salary\n"
+                + "	ae.salary,\n"
+                + "	v.gelmediyi_is_gunun_cermesi \n"
                 + "FROM\n"
-                + "	vergi_emp ve \n"
-                + "	LEFT JOIN about_employee ae ON ae.id = ve.employe_id \n"
-                + "	LEFT JOIN vergi v ON v.id = ve.id";
+                + "	vergi_emp ve\n"
+                + "	LEFT JOIN vergi v ON v.id = ve.vergi_id\n"
+                + "	LEFT JOIN about_employee ae ON ae.id = ve.employe_id";
 
         try (Connection con = connection()) {
             PreparedStatement stm = con.prepareStatement(sql);
@@ -92,7 +93,7 @@ public class VergiEmpDaoImpl extends AbstractDao implements VergiEmpDaoInter {
 
     @Override
     public boolean AddVergiEmp(VergiEmp ver) {
-        VergiEmp ve = DailySalaryUtil.vergiNet(ver);
+        VergiEmp ve = Config.vergiNet(ver);
         System.out.println("BURDA: " + ve.getIsh_200_gore());
 
         VergiDaoInter vdi = Contex.instanceVergiDao();
@@ -188,8 +189,6 @@ public class VergiEmpDaoImpl extends AbstractDao implements VergiEmpDaoInter {
 
     }
 
-    
-
     @Override
     public List<VergiEmp> SearchByFullName(String fullName) {
 
@@ -205,6 +204,7 @@ public class VergiEmpDaoImpl extends AbstractDao implements VergiEmpDaoInter {
                         + "	ve.*,\n"
                         + "	ae.full_name,\n"
                         + "	ae.salary \n"
+                        + "	v.gelmediyi_is_gunun_cermesi \n"
                         + "FROM\n"
                         + "	vergi_emp ve\n"
                         + "	LEFT JOIN about_employee ae ON ae.id = ve.employe_id\n"
@@ -225,7 +225,7 @@ public class VergiEmpDaoImpl extends AbstractDao implements VergiEmpDaoInter {
 
     @Override
     public VergiEmp SearchById(int id) {
-     VergiEmp emp = null;
+        VergiEmp emp = null;
 
         try (Connection c = connection()) {
             Statement stm = c.createStatement();
@@ -236,7 +236,7 @@ public class VergiEmpDaoImpl extends AbstractDao implements VergiEmpDaoInter {
                     + "FROM\n"
                     + "	vergi_emp ve\n"
                     + "	LEFT JOIN about_employee ae ON ae.id = ve.employe_id\n"
-                    + "	LEFT JOIN vergi v ON v.id = ve.id WHERE ve.id ="+id);
+                    + "	LEFT JOIN vergi v ON v.id = ve.id WHERE ve.id =" + id);
             ResultSet rs = stm.getResultSet();
             while (rs.next()) {
                 emp = getVergiEmp(rs);
@@ -247,8 +247,8 @@ public class VergiEmpDaoImpl extends AbstractDao implements VergiEmpDaoInter {
             System.out.println(e.getMessage());
             return null;
         }
-        return emp;  
-    
+        return emp;
+
     }
 
     @Override
@@ -265,7 +265,7 @@ public class VergiEmpDaoImpl extends AbstractDao implements VergiEmpDaoInter {
                     + "FROM\n"
                     + "	vergi_emp ve\n"
                     + "	LEFT JOIN about_employee ae ON ae.id = ve.employe_id\n"
-                    + "	LEFT JOIN vergi v ON v.id = ve.id WHERE ve.employe_id ="+id);
+                    + "	LEFT JOIN vergi v ON v.id = ve.id WHERE ve.employe_id =" + id);
             ResultSet rs = stm.getResultSet();
             while (rs.next()) {
                 emp = getVergiEmp(rs);
@@ -279,6 +279,5 @@ public class VergiEmpDaoImpl extends AbstractDao implements VergiEmpDaoInter {
         return emp;
 
     }
-    
-    
+
 }

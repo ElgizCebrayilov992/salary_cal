@@ -9,15 +9,15 @@ package com.mycompany.entity;
  *
  * @author Virtu
  */
-public class MonthDa {
+public class MonthDate {
     private int day;
     private int month;
     private int year;
 
-    public MonthDa() {
+    public MonthDate() {
     }
 
-    public MonthDa(int day, int month, int year) {
+    public MonthDate(int day, int month, int year) {
         this.day = day;
         this.month = month;
         this.year = year;

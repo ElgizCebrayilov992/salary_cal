@@ -7,11 +7,13 @@ package com.mycompany.main;
 
 import com.mycompany.dao.impl.DailySalaryDaoImpl;
 import com.mycompany.dao.impl.EmployeDaoImpl;
+import com.mycompany.dao.impl.PayTypeDaoImp;
 import com.mycompany.dao.impl.PositionDaoImpl;
 import com.mycompany.dao.impl.VergiDaoImpl;
 import com.mycompany.dao.impl.VergiEmpDaoImpl;
 import com.mycompany.dao.inter.DailySalaryDaoInter;
 import com.mycompany.dao.inter.EmployeDaoInter;
+import com.mycompany.dao.inter.PayTypeDaoInter;
 import com.mycompany.dao.inter.PositionDaoInter;
 import com.mycompany.dao.inter.VergiDaoInter;
 import com.mycompany.dao.inter.VergiEmpDaoInter;
@@ -37,8 +39,12 @@ public class Contex {
     public static VergiEmpDaoInter instanceVergiEmpDao() {
         return new VergiEmpDaoImpl();
     }
-    
+
     public static DailySalaryDaoInter instanceDailySalaryDao() {
         return new DailySalaryDaoImpl();
+    }
+
+    public static PayTypeDaoInter instancePayTypeDao() {
+        return new PayTypeDaoImp();
     }
 }

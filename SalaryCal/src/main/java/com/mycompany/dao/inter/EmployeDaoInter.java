@@ -15,6 +15,8 @@ import java.util.List;
 public interface EmployeDaoInter {
 
     public List<Employee> allList();
+    
+    public List<Employee> allListStatus();
 
     public boolean AddEmploye(Employee emp);
 

@@ -6,8 +6,6 @@
 package com.mycompany.dao.inter;
 
 import com.mycompany.entity.DailySalary;
-import com.mycompany.entity.VergiEmp;
-import java.sql.Date;
 import java.util.List;
 
 /**
@@ -26,13 +24,18 @@ public interface DailySalaryDaoInter {
 
     public DailySalary SearchById(int id);
 
-    public DailySalary SearchByFullNameAndDate(String fullname, String date);
+    public DailySalary SearchByFinAndSeriaAndDate(String fin, String seria, String date);
 
     public List<DailySalary> SearchEmployeById(int id);
 
-    public List<DailySalary> SearchByFullName(String fullName);
-    
     public List<DailySalary> SearchByDate(String date);
     
+    public List<DailySalary> SearchByDateRanger(int id, String start, String end);
+
+
+    public List<DailySalary> FrontSearch(String bonus, String advance,
+            String penalty, String taken_daily_salary,
+            String daily_salary, String about_date, String full_name,
+            String identity_fin, String identity_seria);
 
 }
