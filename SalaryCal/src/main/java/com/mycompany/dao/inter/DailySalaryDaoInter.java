@@ -29,9 +29,14 @@ public interface DailySalaryDaoInter {
     public List<DailySalary> SearchEmployeById(int id);
 
     public List<DailySalary> SearchByDate(String date);
-    
-    public List<DailySalary> SearchByDateRanger(int id, String start, String end);
 
+    public List<DailySalary> SearchByDateRangerBeraber(int id, String start, String end);
+
+    public List<DailySalary> SearchByDateRangerBoyuk(int id, String start, String end);
+
+    public List<DailySalary> SearchByDateRangerBeraberLimit(int id, String start,String end, int limit);
+
+    public List<DailySalary> SearchByDateRangerBoyukLimit(int id, String start,String end, int limit);
 
     public List<DailySalary> FrontSearch(String bonus, String advance,
             String penalty, String taken_daily_salary,

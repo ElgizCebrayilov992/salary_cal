@@ -6,12 +6,16 @@
 package com.mycompany.main;
 
 import com.mycompany.config.Config;
+import com.mycompany.config.FindMonthAllDay;
 import com.mycompany.dao.inter.DailySalaryDaoInter;
 import com.mycompany.dao.inter.EmployeDaoInter;
+import com.mycompany.dao.inter.MonthlySalaryDaoInter;
 import com.mycompany.dao.inter.VergiDaoInter;
 import com.mycompany.dao.inter.VergiEmpDaoInter;
 import com.mycompany.entity.DailySalary;
 import com.mycompany.entity.Employee;
+import com.mycompany.entity.MonthDate;
+import com.mycompany.entity.MonthlySalary;
 import com.mycompany.entity.PayType;
 import com.mycompany.entity.Position;
 import com.mycompany.entity.Vergi;
@@ -20,6 +24,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,98 +34,76 @@ import java.util.logging.Logger;
  */
 public class Main {
 
-    public static void main(String[] args) throws ParseException {
-
+    public static void main(String[] args) throws ParseException, InterruptedException {
+//int a=0;
         EmployeDaoInter edi = Contex.instanceEmployeeDao();
         VergiDaoInter vdi = Contex.instanceVergiDao();
         VergiEmpDaoInter vedi = Contex.instanceVergiEmpDao();
-//        String name = "Elgiz";
-//        String surname = "Cebrayiov";
-//        String phone = "+99470608368";
-//        String address = "Baki";
-//        String identity_fin = "SHDJHK";
-//        String identity_seria = "SHDJHK";
-//        String email = "virtu309a7@gmail.com";
-//        int salary = 780;
-//        int num_of_day = 5;
-//        int position = 1;
-//        String fullname = name + " " + surname;
-//        int status = 1;
+        MonthlySalaryDaoInter msdi = Contex.instanceMonthlySalaryDao();
+        DailySalaryDaoInter dsdi = Contex.instanceDailySalaryDao();
+        List<MonthlySalary> list = msdi.SearchEmployeById(13);
 //
-//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//        Vergi v = new Vergi();
+//        v.setId(1);
+//        Employee emp = edi.SearchById(14);
 //
-//        try {
-//            java.util.Date utilDate = format.parse("2020-08-01");
-//            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-//            System.out.println("Salam: "+sqlDate);
-//
-//            Employee emp = new Employee();
-//            emp.setName(name);
-//            emp.setSurname(surname);
-//            emp.setPhone(phone);
-//            emp.setIdentity_fin(identity_fin);
-//            emp.setIdentity_seria(identity_seria);
-//            emp.setEmail(email);
-//            emp.setSalary(salary);
-//            emp.setJob_start(sqlDate);
-//            emp.setJob_end(sqlDate);
-//            emp.setNum_of_day(num_of_day);
-//            Position p = new Position();
-//            p.setId(1);
-//            emp.setPositionId(p);
-//            emp.setFullname(fullname);
-//            emp.setStatus(status);
-//            PayType pt = new PayType();
-//            pt.setId(1);
-//            emp.setPayType(pt);
-//            emp.setSend_salary_day(sqlDate);
-//            edi.AddEmploye(emp);
-//
-//        } catch (ParseException e) {
-//            System.out.println("Error: "+e.getMessage());
-//        }
-
-        Employee emp = edi.SearchById(12);
-        DailySalary ds=new DailySalary();
-//        Vergi v=vdi.SearchById(1);
 //        VergiEmp ve=new VergiEmp(emp, v);
-//        vedi.AddVergiEmp(ve);
-
+//         vedi.AddVergiEmp(ve);
         
+//        boolean v=emp.getPayType().getValue()==;
+        //List<DailySalary> liste=dsdi.FrontSearch(null, null, null, null, null, null, "El", null, null);
+//        List<DailySalary> liste=dsdi.FrontSearch("", "", "", "", "", "", "El", "", "");
+//        for (DailySalary dailySalary : liste) {
+//            System.out.println(dailySalary);
+//        }
         String date = "";
-        int ay = 0;
+        String ay = "";
         int il = 2020;
-        int gun = 0;
+        String gun = "";
+        String ay1 = "";
+        String gun2 = "";
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        for (int a = 7; a < 9; a++) {
+        
+        for (int a = 7; a <= 10; a++) {
+            
             for (int g = 1; g < 32; g++) {
-                gun = g;
-                ay = a;
-                if (g<10) {
-                date = il + "-0" + ay + "-0" + gun;
-                    
-                }else{
-                    
-                date = il + "-0" + ay + "-" + gun;
+                
+                gun = g + "";
+                ay = a + "";
+                if (g < 10) {
+                    gun2 = "0" + gun;
                 }
-                System.out.println("Date: " + date);
+                
+                if (g >= 10) {
+                    gun2 = gun;
+                }
+                
+                if (a < 10) {
+                    ay1 = "0" + ay;
+                }
+                if (a >= 10) {
+                    ay1 = ay;
+                }
+                
+                date = il + "-" + ay1 + "-" + gun2;
+                
+                System.out.println("Date: "+date);
                 try {
                     java.util.Date utilDate = format.parse(date);
                     java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+                   
                     Config.addDailySalary(sqlDate);
-
-                    Config.addMonthlySalary();
+                    Thread.sleep(2000);
+                    Config.addAyliqMaas(sqlDate);
+                    Thread.sleep(2000);
+                    
                 } catch (ParseException e) {
-                    System.out.println("Error: " + e.getMessage());
+                    
                 }
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                
             }
         }
-
+//        MonthDate md=FindMonthAllDay.getDaily();
     }
 
 }

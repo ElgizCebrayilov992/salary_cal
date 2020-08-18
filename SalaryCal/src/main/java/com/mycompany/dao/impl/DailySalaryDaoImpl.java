@@ -36,6 +36,7 @@ public class DailySalaryDaoImpl extends AbstractDao implements DailySalaryDaoInt
         emp.setIdentity_fin(identity_fin);
         emp.setIdentity_seria(identity_seria);
         emp.setFullname(full_name);
+
         double bonus = rs.getDouble("bonus");
         double advance = rs.getDouble("advance");
         double penalty = rs.getDouble("penalty");
@@ -277,7 +278,7 @@ public class DailySalaryDaoImpl extends AbstractDao implements DailySalaryDaoInt
 
     @Override
     public List<DailySalary> FrontSearch(String bonus, String advance, String penalty, String taken_daily_salary, String daily_salary, String about_date, String full_name, String identity_fin, String identity_seria) {
-
+        System.out.println("FullName: " + full_name);
         List<DailySalary> list = new ArrayList<>();
         String query = "SELECT\n"
                 + "	* \n"
@@ -285,6 +286,7 @@ public class DailySalaryDaoImpl extends AbstractDao implements DailySalaryDaoInt
                 + "	monthly_salary ms\n"
                 + "	LEFT JOIN (\n"
                 + "	SELECT\n"
+                + "	aa.`status` AS sts,\n"
                 + "		aa.full_name,\n"
                 + "		aa.identity_fin,\n"
                 + "		aa.identity_seria,\n"
@@ -299,7 +301,7 @@ public class DailySalaryDaoImpl extends AbstractDao implements DailySalaryDaoInt
                 + "		LEFT JOIN position p ON p.id = aa.position_id \n"
                 + "	) ae ON ae.emp_id = ms.employe_id \n"
                 + "WHERE\n"
-                + "	ds.`status`=1 ";
+                + "	ae.sts=1 ";
 
         if (!bonus.trim().isEmpty() && bonus != null) {
             String tBonus = "AND bonus LIKE '%" + bonus + "%' ";
@@ -332,6 +334,7 @@ public class DailySalaryDaoImpl extends AbstractDao implements DailySalaryDaoInt
 
         }
         if (!full_name.trim().isEmpty() && full_name != null) {
+            System.out.println("full name girildi");
             String tBonus = "AND full_name LIKE '%" + full_name + "%' ";
             query = query + tBonus;
 
@@ -341,16 +344,7 @@ public class DailySalaryDaoImpl extends AbstractDao implements DailySalaryDaoInt
             query = query + tBonus;
 
         }
-        if (!full_name.trim().isEmpty() && full_name != null) {
-            String tBonus = "AND full_name LIKE '%" + full_name + "%' ";
-            query = query + tBonus;
 
-        }
-        if (!identity_fin.trim().isEmpty() && identity_fin != null) {
-            String tBonus = "AND identity_fin LIKE '%" + identity_fin + "%' ";
-            query = query + tBonus;
-
-        }
         if (!identity_seria.trim().isEmpty() && identity_seria != null) {
             String tBonus = "AND identity_seria LIKE '%" + identity_seria + "%' ";
             query = query + tBonus;
@@ -359,6 +353,7 @@ public class DailySalaryDaoImpl extends AbstractDao implements DailySalaryDaoInt
 
         query = query + " ORDER BY\n"
                 + "	about_date DESC ";
+        System.out.println("Hazirlanan query:   " + query);
         try (Connection con = connection()) {
             //String sql="";
 
@@ -381,9 +376,9 @@ public class DailySalaryDaoImpl extends AbstractDao implements DailySalaryDaoInt
     }
 
     @Override
-    public List<DailySalary> SearchByDateRanger(int id, String start, String end) {
-       
-    List<DailySalary> list = new ArrayList<>();
+    public List<DailySalary> SearchByDateRangerBeraber(int id, String start, String end) {
+
+        List<DailySalary> list = new ArrayList<>();
 
         try (Connection con = connection()) {
             //String sql="";
@@ -400,9 +395,9 @@ public class DailySalaryDaoImpl extends AbstractDao implements DailySalaryDaoInt
                     + "	daily_salary ds\n"
                     + "	LEFT JOIN about_employee ae ON ae.id = ds.employe_id \n"
                     + "WHERE\n"
-                    + "	ds.about_date >= DATE( '"+start+"' ) \n"
-                    + "	AND ds.about_date <= DATE( '"+end+"' ) \n"
-                    + "	AND ae.id="+id+"\n"
+                    + "	ds.about_date >= DATE( '" + start + "' ) \n"
+                    + "	AND ds.about_date <= DATE( '" + end + "' ) \n"
+                    + "	AND ae.id=" + id + "\n"
                     + "AND ds.`status` = 1	\n"
                     + "ORDER BY\n"
                     + "	ds.about_date DESC;");
@@ -418,7 +413,126 @@ public class DailySalaryDaoImpl extends AbstractDao implements DailySalaryDaoInt
         }
         return list;
 
-    
+    }
+
+    @Override
+    public List<DailySalary> SearchByDateRangerBoyuk(int id, String start, String end) {
+        List<DailySalary> list = new ArrayList<>();
+
+        try (Connection con = connection()) {
+            //String sql="";
+
+//                sql+="'%fullName=?"+"%'";
+//                //System.out.println(sql+" and fullName="+fullName);
+            Statement stm = connection().createStatement();
+            stm.execute("SELECT\n"
+                    + "	ds.*,\n"
+                    + "	ae.full_name,\n"
+                    + "	ae.identity_fin,\n"
+                    + "	ae.identity_seria \n"
+                    + "FROM\n"
+                    + "	daily_salary ds\n"
+                    + "	LEFT JOIN about_employee ae ON ae.id = ds.employe_id \n"
+                    + "WHERE\n"
+                    + "	ds.about_date > DATE( '" + start + "' ) \n"
+                    + "	AND ds.about_date <= DATE( '" + end + "' ) \n"
+                    + "	AND ae.id=" + id + "\n"
+                    + "AND ds.`status` = 1	\n"
+                    + "ORDER BY\n"
+                    + "	ds.about_date DESC;");
+            ResultSet rs = stm.getResultSet();
+            while (rs.next()) {
+                DailySalary result = getDailySalary(rs);
+                list.add(result);
+
+            }
+
+        } catch (Exception e) {
+            e.getMessage();
+        }
+        return list;
+
+    }
+
+    @Override
+    public List<DailySalary> SearchByDateRangerBeraberLimit(int id, String start, String end, int limit) {
+        List<DailySalary> list = new ArrayList<>();
+
+        try (Connection con = connection()) {
+            //String sql="";
+
+//                sql+="'%fullName=?"+"%'";
+//                //System.out.println(sql+" and fullName="+fullName);
+            Statement stm = connection().createStatement();
+            stm.execute("SELECT\n"
+                    + "	 ds.*,\n"
+                    + "ae.full_name,\n"
+                    + " ae.identity_fin,\n"
+                    + "	 ae.identity_seria  \n"
+                    + "FROM\n"
+                    + " daily_salary ds \n"
+                    + "	LEFT JOIN about_employee ae ON ae.id = ds.employe_id \n"
+                    + "WHERE\n"
+                    + "	ds.about_date >= DATE( '" + start + "' ) \n"
+                    + "	AND ds.about_date <= DATE( '" + end + "' ) \n"
+                    + "	AND ae.id = " + id + " \n"
+                    + "	AND ds.`status` = 1 \n"
+                    + "ORDER BY\n"
+                    + " ds.about_date ASC\n"
+                    + " LIMIT " + limit);
+            ResultSet rs = stm.getResultSet();
+            while (rs.next()) {
+                DailySalary result = getDailySalary(rs);
+                list.add(result);
+
+            }
+
+        } catch (Exception e) {
+            e.getMessage();
+        }
+        return list;
+
+    }
+
+    @Override
+    public List<DailySalary> SearchByDateRangerBoyukLimit(int id, String start,String end, int limit) {
+
+        List<DailySalary> list = new ArrayList<>();
+
+        try (Connection con = connection()) {
+            //String sql="";
+
+//                sql+="'%fullName=?"+"%'";
+//                //System.out.println(sql+" and fullName="+fullName);
+            Statement stm = connection().createStatement();
+            stm.execute("SELECT\n"
+                    + "	 ds.*,\n"
+                    + "ae.full_name,\n"
+                    + " ae.identity_fin,\n"
+                    + "	 ae.identity_seria  \n"
+                    + "FROM\n"
+                    + " daily_salary ds \n"
+                    + "	LEFT JOIN about_employee ae ON ae.id = ds.employe_id \n"
+                    + "WHERE\n"
+                    + "	ds.about_date > DATE( '" + start + "' ) \n"
+                    + "	AND ds.about_date <= DATE( '" + end + "' ) \n"
+                    + "	AND ae.id = " + id + " \n"
+                    + "	AND ds.`status` = 1 \n"
+                    + "ORDER BY\n"
+                    + " ds.about_date ASC\n"
+                    + " LIMIT " + limit);
+            ResultSet rs = stm.getResultSet();
+            while (rs.next()) {
+                DailySalary result = getDailySalary(rs);
+                list.add(result);
+
+            }
+
+        } catch (Exception e) {
+            e.getMessage();
+        }
+        return list;
+
     }
 
 }

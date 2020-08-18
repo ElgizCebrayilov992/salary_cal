@@ -7,12 +7,14 @@ package com.mycompany.main;
 
 import com.mycompany.dao.impl.DailySalaryDaoImpl;
 import com.mycompany.dao.impl.EmployeDaoImpl;
+import com.mycompany.dao.impl.MonthlySalaryDaoImpl;
 import com.mycompany.dao.impl.PayTypeDaoImp;
 import com.mycompany.dao.impl.PositionDaoImpl;
 import com.mycompany.dao.impl.VergiDaoImpl;
 import com.mycompany.dao.impl.VergiEmpDaoImpl;
 import com.mycompany.dao.inter.DailySalaryDaoInter;
 import com.mycompany.dao.inter.EmployeDaoInter;
+import com.mycompany.dao.inter.MonthlySalaryDaoInter;
 import com.mycompany.dao.inter.PayTypeDaoInter;
 import com.mycompany.dao.inter.PositionDaoInter;
 import com.mycompany.dao.inter.VergiDaoInter;
@@ -46,5 +48,8 @@ public class Contex {
 
     public static PayTypeDaoInter instancePayTypeDao() {
         return new PayTypeDaoImp();
+    }
+    public static MonthlySalaryDaoInter instanceMonthlySalaryDao() {
+        return new MonthlySalaryDaoImpl();
     }
 }

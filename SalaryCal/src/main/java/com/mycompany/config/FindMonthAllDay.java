@@ -20,6 +20,7 @@ public class FindMonthAllDay {
         int gun = 0;
 
         int month = now.get(Calendar.MONTH) + 1;
+        //int month = 2;
 
         int year = now.get(Calendar.YEAR);
 

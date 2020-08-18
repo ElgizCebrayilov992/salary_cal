@@ -66,11 +66,12 @@ public class MonthlySalaryDaoImpl extends AbstractDao implements MonthlySalaryDa
         double total_taken_daily_salary = rs.getDouble("total_taken_daily_salary");
         double employee_debit = rs.getDouble("employee_debit");
         double company_debit = rs.getDouble("company_debit");
+        double give_salary = rs.getDouble("give_salary");
         Date about_date = rs.getDate("about_date");
         double net_salary = rs.getDouble("net_salary");
         int status = rs.getInt("status");
 
-        return new MonthlySalary(id, emp, total_bonus, total_advance, total_penalty, total_taken_daily_salary, employee_debit, company_debit, about_date, net_salary, status);
+        return new MonthlySalary(id, emp, total_bonus, total_advance, total_penalty, total_taken_daily_salary, employee_debit, company_debit, about_date, net_salary, status,give_salary);
     }
 
     @Override
@@ -117,12 +118,13 @@ public class MonthlySalaryDaoImpl extends AbstractDao implements MonthlySalaryDa
 
     @Override
     public boolean AddMonthlySalary(MonthlySalary ms) {
+        
 
         try (Connection c = connection()) {
             PreparedStatement ps = c.prepareStatement("INSERT INTO monthly_salary "
                     + "(employe_id,total_bonus,total_advance,total_penalty,"
-                    + "total_taken_daily_salary,employee_debit,company_debit,about_date,net_salary,`status`) "
-                    + "VALUES (?,?,?,?,?,?,?,?,?)");
+                    + "total_taken_daily_salary,employee_debit,company_debit,about_date,net_salary,`status`,give_salary) "
+                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?)");
 
             ps.setInt(1, ms.getEmploye_id().getId());
             ps.setDouble(2, ms.getTotal_bonus());
@@ -134,6 +136,7 @@ public class MonthlySalaryDaoImpl extends AbstractDao implements MonthlySalaryDa
             ps.setDate(8, ms.getAbout_date());
             ps.setDouble(9, ms.getNet_salary());
             ps.setInt(10, ms.getStatus());
+            ps.setDouble(11, ms.getGive_salary());
 
             ps.execute();
         } catch (Exception e) {
@@ -157,7 +160,8 @@ public class MonthlySalaryDaoImpl extends AbstractDao implements MonthlySalaryDa
                     + "company_debit=?,"
                     + "`company_debit`=?,"
                     + "net_salary=?,"
-                    + "status=?"
+                    + "status=?,"
+                    + "give_salary=? "
                     + " where id=?");
 
             ps.setInt(1, ms.getEmploye_id().getId());
@@ -170,7 +174,8 @@ public class MonthlySalaryDaoImpl extends AbstractDao implements MonthlySalaryDa
             ps.setDate(8, ms.getAbout_date());
             ps.setDouble(9, ms.getNet_salary());
             ps.setInt(10, ms.getStatus());
-            ps.setInt(11, ms.getId());
+            ps.setDouble(11, ms.getGive_salary());
+            ps.setInt(12, ms.getId());
             ps.execute();
         } catch (Exception e) {
             System.out.println(e.getMessage());

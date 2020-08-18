@@ -24,11 +24,12 @@ public class MonthlySalary {
     private Date about_date;
     private double net_salary;
     private int status;
+    private double give_salary;
 
     public MonthlySalary() {
     }
 
-    public MonthlySalary(int id, Employee employe_id, double total_bonus, double total_advance, double total_penalty, double total_taken_daily_salary, double employee_debit, double company_debit, Date about_date, double net_salary, int status) {
+    public MonthlySalary(int id, Employee employe_id, double total_bonus, double total_advance, double total_penalty, double total_taken_daily_salary, double employee_debit, double company_debit, Date about_date, double net_salary, int status, double give_salary) {
         this.id = id;
         this.employe_id = employe_id;
         this.total_bonus = total_bonus;
@@ -40,7 +41,10 @@ public class MonthlySalary {
         this.about_date = about_date;
         this.net_salary = net_salary;
         this.status = status;
+        this.give_salary = give_salary;
     }
+
+  
 
     public int getId() {
         return id;
@@ -130,20 +134,29 @@ public class MonthlySalary {
         this.status = status;
     }
 
+    public double getGive_salary() {
+        return give_salary;
+    }
+
+    public void setGive_salary(double give_salary) {
+        this.give_salary = give_salary;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 89 * hash + this.id;
-        hash = 89 * hash + Objects.hashCode(this.employe_id);
-        hash = 89 * hash + (int) (Double.doubleToLongBits(this.total_bonus) ^ (Double.doubleToLongBits(this.total_bonus) >>> 32));
-        hash = 89 * hash + (int) (Double.doubleToLongBits(this.total_advance) ^ (Double.doubleToLongBits(this.total_advance) >>> 32));
-        hash = 89 * hash + (int) (Double.doubleToLongBits(this.total_penalty) ^ (Double.doubleToLongBits(this.total_penalty) >>> 32));
-        hash = 89 * hash + (int) (Double.doubleToLongBits(this.total_taken_daily_salary) ^ (Double.doubleToLongBits(this.total_taken_daily_salary) >>> 32));
-        hash = 89 * hash + (int) (Double.doubleToLongBits(this.employee_debit) ^ (Double.doubleToLongBits(this.employee_debit) >>> 32));
-        hash = 89 * hash + (int) (Double.doubleToLongBits(this.company_debit) ^ (Double.doubleToLongBits(this.company_debit) >>> 32));
-        hash = 89 * hash + Objects.hashCode(this.about_date);
-        hash = 89 * hash + (int) (Double.doubleToLongBits(this.net_salary) ^ (Double.doubleToLongBits(this.net_salary) >>> 32));
-        hash = 89 * hash + this.status;
+        hash = 97 * hash + this.id;
+        hash = 97 * hash + Objects.hashCode(this.employe_id);
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.total_bonus) ^ (Double.doubleToLongBits(this.total_bonus) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.total_advance) ^ (Double.doubleToLongBits(this.total_advance) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.total_penalty) ^ (Double.doubleToLongBits(this.total_penalty) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.total_taken_daily_salary) ^ (Double.doubleToLongBits(this.total_taken_daily_salary) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.employee_debit) ^ (Double.doubleToLongBits(this.employee_debit) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.company_debit) ^ (Double.doubleToLongBits(this.company_debit) >>> 32));
+        hash = 97 * hash + Objects.hashCode(this.about_date);
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.net_salary) ^ (Double.doubleToLongBits(this.net_salary) >>> 32));
+        hash = 97 * hash + this.status;
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.give_salary) ^ (Double.doubleToLongBits(this.give_salary) >>> 32));
         return hash;
     }
 
@@ -186,6 +199,9 @@ public class MonthlySalary {
         if (this.status != other.status) {
             return false;
         }
+        if (Double.doubleToLongBits(this.give_salary) != Double.doubleToLongBits(other.give_salary)) {
+            return false;
+        }
         if (!Objects.equals(this.employe_id, other.employe_id)) {
             return false;
         }
@@ -197,9 +213,10 @@ public class MonthlySalary {
 
     @Override
     public String toString() {
-        return "MonthlySalary{" + "id=" + id + ", employe_id=" + employe_id + ", total_bonus=" + total_bonus + ", total_advance=" + total_advance + ", total_penalty=" + total_penalty + ", total_taken_daily_salary=" + total_taken_daily_salary + ", employee_debit=" + employee_debit + ", company_debit=" + company_debit + ", about_date=" + about_date + ", net_salary=" + net_salary + ", status=" + status + '}';
+        return "MonthlySalary{" + "id=" + id + ", employe_id=" + employe_id + ", total_bonus=" + total_bonus + ", total_advance=" + total_advance + ", total_penalty=" + total_penalty + ", total_taken_daily_salary=" + total_taken_daily_salary + ", employee_debit=" + employee_debit + ", company_debit=" + company_debit + ", about_date=" + about_date + ", net_salary=" + net_salary + ", status=" + status + ", give_salary=" + give_salary + '}';
     }
-    
+
+
     
     
 }

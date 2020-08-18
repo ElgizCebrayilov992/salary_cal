@@ -22,7 +22,7 @@ public abstract class AbstractDao {
         final String password="12345";
         
         Connection c=DriverManager.getConnection(url, username, password);
-        System.out.println("connected");
+       
         
         return c;
     
