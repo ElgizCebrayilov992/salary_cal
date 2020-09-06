@@ -26,30 +26,63 @@ import com.mycompany.dao.inter.VergiEmpDaoInter;
  */
 public class Contex {
 
+    private static EmployeDaoImpl edi = null;
+    private static PositionDaoImpl pdi = null;
+    private static VergiDaoImpl vdi = null;
+    private static VergiEmpDaoImpl vedi = null;
+    private static DailySalaryDaoImpl dsdi = null;
+    private static PayTypeDaoImp ptdi = null;
+    private static MonthlySalaryDaoImpl msdi = null;
+
     public static EmployeDaoInter instanceEmployeeDao() {
-        return new EmployeDaoImpl();
+        if (edi == null) {
+            edi = new EmployeDaoImpl();
+        }
+        return edi;
     }
 
     public static PositionDaoInter instancePositionDao() {
-        return new PositionDaoImpl();
+        if (pdi == null) {
+            pdi = new PositionDaoImpl();
+        }
+        return pdi;
     }
 
     public static VergiDaoInter instanceVergiDao() {
-        return new VergiDaoImpl();
+        if (vdi == null) {
+            vdi = new VergiDaoImpl();
+        }
+        return vdi;
     }
 
     public static VergiEmpDaoInter instanceVergiEmpDao() {
-        return new VergiEmpDaoImpl();
+        if (vedi == null) {
+            vedi = new VergiEmpDaoImpl();
+        }
+        return vedi;
     }
 
     public static DailySalaryDaoInter instanceDailySalaryDao() {
-        return new DailySalaryDaoImpl();
+        if (dsdi == null) {
+            dsdi = new DailySalaryDaoImpl();
+        }
+        return dsdi;
+
     }
 
     public static PayTypeDaoInter instancePayTypeDao() {
-        return new PayTypeDaoImp();
+        if (ptdi == null) {
+            ptdi = new PayTypeDaoImp();
+        }
+        return ptdi;
+
     }
+
     public static MonthlySalaryDaoInter instanceMonthlySalaryDao() {
-        return new MonthlySalaryDaoImpl();
+        if (msdi == null) {
+            msdi = new MonthlySalaryDaoImpl();
+        }
+        return msdi;
+
     }
 }

@@ -30,6 +30,7 @@ public class MonthlySalaryDaoImpl extends AbstractDao implements MonthlySalaryDa
 
 //*******************************************************************
         int employe_id = rs.getInt("employe_id");
+        int empStatus = rs.getInt("empStatus");
         String identity_fin = rs.getString("identity_fin");
         String identity_seria = rs.getString("identity_seria");
         String full_name = rs.getString("full_name");
@@ -41,6 +42,7 @@ public class MonthlySalaryDaoImpl extends AbstractDao implements MonthlySalaryDa
         emp.setIdentity_seria(identity_seria);
         emp.setFullname(full_name);
         emp.setPhone(phone);
+        emp.setStatus(empStatus);
 
         String value = rs.getString("value");
         String type = rs.getString("type");
@@ -69,9 +71,11 @@ public class MonthlySalaryDaoImpl extends AbstractDao implements MonthlySalaryDa
         double give_salary = rs.getDouble("give_salary");
         Date about_date = rs.getDate("about_date");
         double net_salary = rs.getDouble("net_salary");
+        double send_salary = rs.getDouble("send_salary");
         int status = rs.getInt("status");
+        Date send_date = rs.getDate("send_date");
 
-        return new MonthlySalary(id, emp, total_bonus, total_advance, total_penalty, total_taken_daily_salary, employee_debit, company_debit, about_date, net_salary, status,give_salary);
+        return new MonthlySalary(id, emp, total_bonus, total_advance, total_penalty, total_taken_daily_salary, employee_debit, company_debit, about_date, net_salary, status, give_salary, send_salary,send_date);
     }
 
     @Override
@@ -79,26 +83,28 @@ public class MonthlySalaryDaoImpl extends AbstractDao implements MonthlySalaryDa
         List<MonthlySalary> list = new ArrayList<>();
 
         String sql = "SELECT\n"
-                + "	* \n"
+                + " *  \n"
                 + "FROM\n"
-                + "	monthly_salary ms\n"
+                + " monthly_salary ms \n"
                 + "	LEFT JOIN (\n"
-                + "	SELECT\n"
-                + "		aa.full_name,\n"
-                + "		aa.identity_fin,\n"
-                + "		aa.identity_seria,\n"
-                + "		aa.phone,\n"
-                + "		aa.id AS emp_id,\n"
-                + "		pt.`value`,\n"
-                + "		pt.type,\n"
-                + "		p.`name` AS pos_name \n"
+                + "	 SELECT\n"
+                + "	 aa.full_name,\n"
+                + "	 aa.identity_fin,\n"
+                + " aa.identity_seria,\n"
+                + " aa.phone,\n"
+                + " aa.id AS emp_id,\n"
+                + "	pt.`value`,\n"
+                + " pt.type,\n"
+                + " p.`name` AS pos_name,\n"
+                + "aa.`status` AS empStatus\n"
                 + "	FROM\n"
-                + "		about_employee aa\n"
-                + "		LEFT JOIN pay_type pt ON pt.id = aa.pay_type_id\n"
+                + " about_employee aa \n"
+                + "		LEFT JOIN pay_type pt ON pt.id = aa.pay_type_id \n"
                 + "		LEFT JOIN position p ON p.id = aa.position_id \n"
-                + "	) ae ON ae.emp_id = ms.employe_id \n"
+                + "	\n"
+                + ") ae ON ae.emp_id = ms.employe_id WHERE ae.empStatus=1\n"
                 + "ORDER BY\n"
-                + "	ms.about_date DESC";
+                + " ms.about_date DESC";
 
         try (Connection con = connection()) {
             PreparedStatement stm = con.prepareStatement(sql);
@@ -118,8 +124,7 @@ public class MonthlySalaryDaoImpl extends AbstractDao implements MonthlySalaryDa
 
     @Override
     public boolean AddMonthlySalary(MonthlySalary ms) {
-        
-
+        System.out.println("MSL: "+ms);
         try (Connection c = connection()) {
             PreparedStatement ps = c.prepareStatement("INSERT INTO monthly_salary "
                     + "(employe_id,total_bonus,total_advance,total_penalty,"
@@ -137,17 +142,22 @@ public class MonthlySalaryDaoImpl extends AbstractDao implements MonthlySalaryDa
             ps.setDouble(9, ms.getNet_salary());
             ps.setInt(10, ms.getStatus());
             ps.setDouble(11, ms.getGive_salary());
+           
 
             ps.execute();
+            
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("Bu Nedir:  "+e.getMessage());
+            e.printStackTrace();
             return false;
         }
+        System.out.println("Add");
         return true;
     }
 
     @Override
     public boolean UpdateMonthlySalary(MonthlySalary ms) {
+        System.out.println("MSSSI "+ms);
         try (Connection c = connection()) {
 
             PreparedStatement ps = c.prepareStatement("update monthly_salary set "
@@ -158,10 +168,12 @@ public class MonthlySalaryDaoImpl extends AbstractDao implements MonthlySalaryDa
                     + "total_taken_daily_salary=?,"
                     + "employee_debit=?,"
                     + "company_debit=?,"
-                    + "`company_debit`=?,"
+                    +"about_date=?,"
                     + "net_salary=?,"
                     + "status=?,"
-                    + "give_salary=? "
+                    + "give_salary=?,"
+                    + "send_salary=?, "
+                    + "send_date=? "
                     + " where id=?");
 
             ps.setInt(1, ms.getEmploye_id().getId());
@@ -175,10 +187,13 @@ public class MonthlySalaryDaoImpl extends AbstractDao implements MonthlySalaryDa
             ps.setDouble(9, ms.getNet_salary());
             ps.setInt(10, ms.getStatus());
             ps.setDouble(11, ms.getGive_salary());
-            ps.setInt(12, ms.getId());
+            ps.setDouble(12, ms.getSend_salary());
+            ps.setDate(13, ms.getSend_date());
+            ps.setInt(14, ms.getId());
             ps.execute();
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            e.printStackTrace();
             return false;
         }
         return true;
@@ -218,12 +233,13 @@ public class MonthlySalaryDaoImpl extends AbstractDao implements MonthlySalaryDa
                     + "		aa.id AS emp_id,\n"
                     + "		pt.`value`,\n"
                     + "		pt.type,\n"
-                    + "		p.`name` AS pos_name \n"
+                    + "		p.`name` AS pos_name, \n"
+                    + "aa.`status` AS empStatus\n"
                     + "	FROM\n"
                     + "		about_employee aa\n"
                     + "		LEFT JOIN pay_type pt ON pt.id = aa.pay_type_id\n"
                     + "	LEFT JOIN position p ON p.id = aa.position_id \n"
-                    + "	) ae ON ae.emp_id = ms.employe_id WHERE id=" + id + " ORDER BY\n"
+                    + "	) ae ON ae.emp_id = ms.employe_id WHERE ae.empStatus=1 AND id=" + id + " ORDER BY\n"
                     + "	ms.about_date DESC");
             ResultSet rs = stm.getResultSet();
             while (rs.next()) {
@@ -247,25 +263,32 @@ public class MonthlySalaryDaoImpl extends AbstractDao implements MonthlySalaryDa
         try (Connection c = connection()) {
             Statement stm = c.createStatement();
             stm.execute("SELECT\n"
-                    + "	* \n"
+                    + " * \n"
                     + "FROM\n"
-                    + "	monthly_salary ms\n"
+                    + " monthly_salary ms \n"
                     + "	LEFT JOIN (\n"
-                    + "	SELECT\n"
-                    + "		aa.full_name,\n"
-                    + "		aa.identity_fin,\n"
-                    + "		aa.identity_seria,\n"
-                    + "		aa.phone,\n"
-                    + "		aa.id AS emp_id,\n"
-                    + "		pt.`value`,\n"
-                    + "		pt.type,\n"
-                    + "		p.`name` AS pos_name \n"
+                    + "	 SELECT\n"
+                    + "	 aa.full_name,\n"
+                    + "	 aa.identity_fin,\n"
+                    + "	 aa.identity_seria,\n"
+                    + "	 aa.phone,\n"
+                    + "	 aa.id AS emp_id,\n"
+                    + "	 pt.`value`,\n"
+                    + "	 pt.type,\n"
+                    + "	 p.`name` AS pos_name,  \n"
+                    + "aa.`status` AS empStatus\n"
                     + "	FROM\n"
-                    + "		about_employee aa\n"
-                    + "		LEFT JOIN pay_type pt ON pt.id = aa.pay_type_id\n"
-                    + "	LEFT JOIN position p ON p.id = aa.position_id \n"
+                    + " about_employee aa \n"
+                    + "		LEFT JOIN pay_type pt ON pt.id = aa.pay_type_id \n"
+                    + "		LEFT JOIN position p ON p.id = aa.position_id \n"
                     + "	) ae ON ae.emp_id = ms.employe_id \n"
-                    + "	WHERE ae.identity_fin='" + fin + "' AND ae.identity_seria='" + seria + "' AND ms.about_date='" + date + "' ORDER BY ms.about_date DESC");
+                    + "	\n"
+                    + "	WHERE ae.empStatus=1 AND"
+                    + " ae.identity_fin='" + fin + "' AND\n"
+                    + "	ae.identity_seria='" + seria + "' AND\n"
+                    + "	ms.about_date='" + date + "'\n"
+                    + "ORDER BY\n"
+                    + " ms.about_date DESC");
             ResultSet rs = stm.getResultSet();
             while (rs.next()) {
                 emp = getMonthlySalary(rs);
@@ -303,13 +326,14 @@ public class MonthlySalaryDaoImpl extends AbstractDao implements MonthlySalaryDa
                     + "		aa.id AS emp_id,\n"
                     + "		pt.`value`,\n"
                     + "		pt.type,\n"
-                    + "		p.`name` AS pos_name \n"
+                    + "		p.`name` AS pos_name, \n"
+                    + "aa.`status` AS empStatus\n"
                     + "	FROM\n"
                     + "		about_employee aa\n"
                     + "		LEFT JOIN pay_type pt ON pt.id = aa.pay_type_id\n"
                     + "	LEFT JOIN position p ON p.id = aa.position_id \n"
                     + "	) ae ON ae.emp_id = ms.employe_id \n"
-                    + "	WHERE employe_id=" + id + " ORDER BY ms.about_date DESC");
+                    + "	WHERE ae.empStatus=1 AND employe_id=" + id + " ORDER BY ms.about_date DESC");
             ResultSet rs = stm.getResultSet();
             while (rs.next()) {
                 MonthlySalary result = getMonthlySalary(rs);
@@ -348,14 +372,15 @@ public class MonthlySalaryDaoImpl extends AbstractDao implements MonthlySalaryDa
                     + "		aa.id AS emp_id,\n"
                     + "		pt.`value`,\n"
                     + "		pt.type,\n"
-                    + "		p.`name` AS pos_name \n"
+                    + "		p.`name` AS pos_name, \n"
+                    + "aa.`status` AS empStatus\n"
                     + "	FROM\n"
                     + "		about_employee aa\n"
                     + "		LEFT JOIN pay_type pt ON pt.id = aa.pay_type_id\n"
                     + "		LEFT JOIN position p ON p.id = aa.position_id \n"
                     + "	) ae ON ae.emp_id = ms.employe_id \n"
                     + "	\n"
-                    + "	WHERE ae.full_name LIKE '%" + fullName + "%' ORDER BY about_date DESC");
+                    + "	WHERE ae.empStatus=1 AND ae.full_name LIKE '%" + fullName + "%' ORDER BY about_date DESC");
             ResultSet rs = stm.getResultSet();
             while (rs.next()) {
                 MonthlySalary result = getMonthlySalary(rs);
@@ -392,14 +417,15 @@ public class MonthlySalaryDaoImpl extends AbstractDao implements MonthlySalaryDa
                     + "		aa.id AS emp_id,\n"
                     + "		pt.`value`,\n"
                     + "		pt.type,\n"
-                    + "		p.`name` AS pos_name \n"
+                    + "		p.`name` AS pos_name, \n"
+                    + "aa.`status` AS empStatus\n"
                     + "	FROM\n"
                     + "		about_employee aa\n"
                     + "		LEFT JOIN pay_type pt ON pt.id = aa.pay_type_id\n"
                     + "		LEFT JOIN position p ON p.id = aa.position_id \n"
                     + "	) ae ON ae.emp_id = ms.employe_id \n"
                     + "WHERE\n"
-                    + "	ms.about_date='" + date + "'\n"
+                    + " ae.empStatus=1 AND ms.about_date='" + date + "'\n"
                     + "ORDER BY\n"
                     + "	ms.about_date DESC");
             ResultSet rs = stm.getResultSet();
@@ -439,7 +465,8 @@ public class MonthlySalaryDaoImpl extends AbstractDao implements MonthlySalaryDa
                     + "		aa.id AS emp_id,\n"
                     + "		pt.`value`,\n"
                     + "		pt.type,\n"
-                    + "		p.`name` AS pos_name \n"
+                    + "		p.`name` AS pos_name, \n"
+                    + "aa.`status` AS empStatus\n"
                     + "	FROM\n"
                     + "		about_employee aa\n"
                     + "		LEFT JOIN pay_type pt ON pt.id = aa.pay_type_id\n"
@@ -447,9 +474,9 @@ public class MonthlySalaryDaoImpl extends AbstractDao implements MonthlySalaryDa
                     + "	) ae ON ae.emp_id = ms.employe_id \n"
                     + "	\n"
                     + "	WHERE \n"
-                    + "	ms.about_date >= DATE( '"+start+"' )\n"
-                    + "	AND ms.about_date <= DATE( '"+end+"' )\n"
-                    + "	AND ae.emp_id="+id+"\n"
+                    + "  ae.empStatus=1 AND ms.about_date >= DATE( '" + start + "' )\n"
+                    + "	AND ms.about_date <= DATE( '" + end + "' )\n"
+                    + "	AND ae.emp_id=" + id + "\n"
                     + "	AND ms.`status` = 1\n"
                     + "	\n"
                     + "ORDER BY\n"
@@ -484,14 +511,15 @@ public class MonthlySalaryDaoImpl extends AbstractDao implements MonthlySalaryDa
                 + "		aa.id AS emp_id,\n"
                 + "		pt.`value`,\n"
                 + "		pt.type,\n"
-                + "		p.`name` AS pos_name \n"
+                + "		p.`name` AS pos_name, \n"
+                + "aa.`status` AS empStatus\n"
                 + "	FROM\n"
                 + "		about_employee aa\n"
                 + "		LEFT JOIN pay_type pt ON pt.id = aa.pay_type_id\n"
                 + "		LEFT JOIN position p ON p.id = aa.position_id \n"
                 + "	) ae ON ae.emp_id = ms.employe_id \n"
                 + "WHERE\n"
-                + "	ms.`status`=1 ";
+                + "  ae.empStatus=1 AND	ms.`status`=1 ";
 
         if (!total_bonus.trim().isEmpty() && total_bonus != null) {
             String tBonus = "AND total_bonus LIKE '%" + total_bonus + "%' ";

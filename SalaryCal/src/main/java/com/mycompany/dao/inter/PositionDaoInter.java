@@ -20,4 +20,6 @@ public interface PositionDaoInter {
     public boolean UpdatePosition(Position ver);
           
     public boolean  RemovePosition(int id);
+    
+    public Position  SearchPosition(int pId);
 }

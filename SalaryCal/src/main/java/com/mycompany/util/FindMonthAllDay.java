@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.config;
+package com.mycompany.util;
 
 import com.mycompany.entity.MonthDate;
 import java.util.Calendar;

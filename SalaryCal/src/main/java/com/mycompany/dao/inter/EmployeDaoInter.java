@@ -15,16 +15,14 @@ import java.util.List;
 public interface EmployeDaoInter {
 
     public List<Employee> allList();
-    
+
     public List<Employee> allListStatus();
 
     public boolean AddEmploye(Employee emp);
 
     public boolean Updateemploye(Employee emp);
 
-    public List<Employee> SearchByFullName(String fullName);
-
-    public Employee SearchByIdentityFin(String fin);
+    public Employee SearchByIdentityFinAndSeria(String fin, String seria);
 
     public Employee SearchById(int id);
 
@@ -32,4 +30,6 @@ public interface EmployeDaoInter {
 
     public boolean RemoveEmployer(int id);
 
+    public List<Employee> searchFrontEnd(String fullname,String phone,String address,String identity_fin,
+            String identity_seria,String email,String salary,String job_start,String position);
 }

@@ -9,6 +9,7 @@ import com.mycompany.dao.inter.AbstractDao;
 import com.mycompany.dao.inter.PositionDaoInter;
 import com.mycompany.entity.Position;
 import com.mycompany.entity.Vergi;
+import com.mycompany.entity.VergiEmp;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -97,6 +98,28 @@ public class PositionDaoImpl extends AbstractDao implements PositionDaoInter {
             return false;
         }
         return true;
+    
+    
+    }
+
+    @Override
+    public Position SearchPosition(int pId) {
+       Position emp = null;
+
+        try (Connection c = connection()) {
+            Statement stm = c.createStatement();
+            stm.execute("SELECT * FROM position WHERE id=" + pId);
+            ResultSet rs = stm.getResultSet();
+            while (rs.next()) {
+                emp = getPosition(rs);
+
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return emp;
     
     
     }

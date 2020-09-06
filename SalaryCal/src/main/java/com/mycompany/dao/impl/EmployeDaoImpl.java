@@ -5,7 +5,7 @@
  */
 package com.mycompany.dao.impl;
 
-import com.mycompany.config.Config;
+import com.mycompany.util.Util;
 import com.mycompany.dao.inter.AbstractDao;
 import com.mycompany.dao.inter.EmployeDaoInter;
 import com.mycompany.entity.Employee;
@@ -70,14 +70,16 @@ public class EmployeDaoImpl extends AbstractDao implements EmployeDaoInter {
         List<Employee> list = new ArrayList<>();
 
         String sql = "SELECT\n"
-                + "	ae.*,\n"
-                + "	p.`name` AS position,\n"
-                + "	pt.`view`,\n"
-                + "	pt.STATUS AS pt_status \n"
+                + " ae.*,\n"
+                + "p.`name` AS position,\n"
+                + " pt.`view`,\n"
+                + " pt.STATUS AS pt_status,\n"
+                + "	 pt.`value`,\n"
+                + " pt.type\n"
                 + "FROM\n"
-                + "	about_employee AS ae\n"
-                + "	LEFT JOIN position p ON p.id = ae.position_id\n"
-                + "	LEFT JOIN pay_type pt ON pt.id = ae.pay_type_id;";
+                + "	 about_employee AS ae \n"
+                + "	LEFT JOIN position p ON p.id = ae.position_id \n"
+                + "	LEFT JOIN pay_type pt ON pt.id = ae.pay_type_id ";
 
         try (Connection con = connection()) {
             PreparedStatement stm = con.prepareStatement(sql);
@@ -97,7 +99,7 @@ public class EmployeDaoImpl extends AbstractDao implements EmployeDaoInter {
 
     @Override
     public boolean AddEmploye(Employee u) {
-        System.out.println("Gelen emp: "+u);
+        System.out.println("Gelen emp: " + u);
 
         try (Connection c = connection()) {
             PreparedStatement ps = c.prepareStatement("INSERT INTO about_employee (`name`,surname,phone,"
@@ -114,7 +116,7 @@ public class EmployeDaoImpl extends AbstractDao implements EmployeDaoInter {
             ps.setDate(9, u.getJob_start());
             ps.setInt(10, u.getNum_of_day());
             ps.setInt(11, u.getPositionId().getId());
-            ps.setString(12, u.getFullname());
+            ps.setString(12, u.getName() + " " + u.getSurname());
             ps.setInt(13, 1);
             ps.setInt(14, u.getPayType().getId());
             ps.setDate(15, u.getJob_end());
@@ -122,7 +124,7 @@ public class EmployeDaoImpl extends AbstractDao implements EmployeDaoInter {
 
             ps.execute();
         } catch (Exception e) {
-            System.out.println("ImplMessages: "+e.getMessage());
+            System.out.println("ImplMessages: " + e.getMessage());
             return false;
         }
         return true;
@@ -146,7 +148,7 @@ public class EmployeDaoImpl extends AbstractDao implements EmployeDaoInter {
             ps.setDate(9, u.getJob_start());
             ps.setInt(10, u.getNum_of_day());
             ps.setInt(11, u.getPositionId().getId());
-            ps.setString(12, u.getFullname());
+            ps.setString(12, u.getName()+ " "+u.getSurname());
             ps.setInt(13, u.getStatus());
             ps.setInt(14, u.getPayType().getId());
             ps.setDate(15, u.getJob_end());
@@ -158,68 +160,6 @@ public class EmployeDaoImpl extends AbstractDao implements EmployeDaoInter {
             return false;
         }
         return true;
-
-    }
-
-    @Override
-    public List<Employee> SearchByFullName(String fullName) {
-        List<Employee> list = new ArrayList<>();
-
-        try (Connection con = connection()) {
-            //String sql="";
-            if (fullName != null && !fullName.trim().isEmpty()) {
-//                sql+="'%fullName=?"+"%'";
-//                //System.out.println(sql+" and fullName="+fullName);
-                Statement stm = connection().createStatement();
-                stm.execute("SELECT\n"
-                        + "	ae.*,\n"
-                        + "	p.`name` AS position,\n"
-                        + "	pt.`view`,\n"
-                        + "	pt.STATUS AS pt_status \n"
-                        + "FROM\n"
-                        + "	about_employee AS ae\n"
-                        + "	LEFT JOIN position p ON p.id = ae.position_id\n"
-                        + "	LEFT JOIN pay_type pt ON pt.id = ae.pay_type_id WHERE full_name LIKE '%" + fullName + "%'");
-                ResultSet rs = stm.getResultSet();
-                while (rs.next()) {
-                    Employee result = getEmployee(rs);
-                    list.add(result);
-                }
-            }
-
-        } catch (Exception e) {
-            e.getMessage();
-        }
-        return list;
-
-    }
-
-    @Override
-    public Employee SearchByIdentityFin(String fin) {
-        Employee emp = null;
-
-        try (Connection c = connection()) {
-            Statement stm = c.createStatement();
-            stm.execute("SELECT\n"
-                    + "	ae.*,\n"
-                    + "	p.`name` AS position,\n"
-                    + "	pt.`view`,\n"
-                    + "	pt.STATUS AS pt_status \n"
-                    + "FROM\n"
-                    + "	about_employee AS ae\n"
-                    + "	LEFT JOIN position p ON p.id = ae.position_id\n"
-                    + "	LEFT JOIN pay_type pt ON pt.id = ae.pay_type_id WHERE identity_fin LIKE '%" + fin + "%'");
-            ResultSet rs = stm.getResultSet();
-            while (rs.next()) {
-                emp = getEmployee(rs);
-
-            }
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
-        return emp;
 
     }
 
@@ -254,7 +194,7 @@ public class EmployeDaoImpl extends AbstractDao implements EmployeDaoInter {
 
     @Override
     public boolean RemoveEmployer(int id) {
-        String endJob = Config.getDateNow();
+        String endJob = Util.getDateNow();
         try (Connection c = connection()) {
             Statement stm = c.createStatement();
             stm.execute("UPDATE about_employee set `status`=0 , job_end='" + endJob + "' WHERE id=" + id);
@@ -334,6 +274,123 @@ public class EmployeDaoImpl extends AbstractDao implements EmployeDaoInter {
             e.getMessage();
         }
         return list;
+    }
+
+    @Override
+    public Employee SearchByIdentityFinAndSeria(String fin, String seria) {
+
+        Employee emp = null;
+
+        try (Connection c = connection()) {
+            Statement stm = c.createStatement();
+            stm.execute("SELECT\n"
+                    + " ae.*,\n"
+                    + "p.`name` AS position,\n"
+                    + " pt.`view`,\n"
+                    + " pt.STATUS AS pt_status,\n"
+                    + "	 pt.`value`,\n"
+                    + " pt.type\n"
+                    + "FROM\n"
+                    + "	 about_employee AS ae \n"
+                    + "	LEFT JOIN position p ON p.id = ae.position_id \n"
+                    + "	LEFT JOIN pay_type pt ON pt.id = ae.pay_type_id \n"
+                    + "WHERE\n"
+                    + " ae.`status` = 1 \n"
+                    + " AND ae.identity_fin='" + fin + "'\n"
+                    + " AND ae.identity_seria='" + seria + "'");
+            ResultSet rs = stm.getResultSet();
+            while (rs.next()) {
+                emp = getEmployee(rs);
+
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return emp;
+    }
+
+    @Override
+    public List<Employee> searchFrontEnd(String fullname, String phone, String address, 
+            String identity_fin, String identity_seria, String email,
+            String salary, String job_start, String position) {
+        List<Employee> list = new ArrayList<>();
+
+        String sql = "SELECT\n"
+                + "	ae.*,\n"
+                + "	p.`name` AS position,\n"
+                + "	pt.`view`,\n"
+                + "	pt.STATUS AS pt_status,\n"
+                + "	pt.`value`,\n"
+                + "	pt.type \n"
+                + "FROM\n"
+                + "	about_employee AS ae\n"
+                + "	LEFT JOIN position p ON p.id = ae.position_id\n"
+                + "	LEFT JOIN pay_type pt ON pt.id = ae.pay_type_id \n"
+                + "WHERE\n"
+                + "	ae.`status` = 1 ";
+        
+         if (!fullname.trim().isEmpty() && fullname != null) {
+            String query2 = "AND ae.full_name LIKE '%" + fullname + "%' ";
+            sql = sql + query2;
+
+        }
+         if (!phone.trim().isEmpty() && phone != null) {
+            String query2 = "AND ae.phone LIKE '%" + phone + "%' ";
+            sql = sql + query2;
+
+        }
+         if (!address.trim().isEmpty() && address != null) {
+            String query2 = "AND ae.address LIKE '%" + address + "%' ";
+            sql = sql + query2;
+
+        }
+         if (!identity_fin.trim().isEmpty() && identity_fin != null) {
+            String query2 = "AND ae.identity_fin LIKE '%" + identity_fin + "%' ";
+            sql = sql + query2;
+
+        }
+         if (!identity_seria.trim().isEmpty() && identity_seria != null) {
+            String query2 = "AND ae.identity_seria LIKE '%" + identity_seria + "%' ";
+            sql = sql + query2;
+
+        }
+         if (!email.trim().isEmpty() && email != null) {
+            String query2 = "AND ae.email LIKE '%" + email + "%' ";
+            sql = sql + query2;
+
+        }
+         if (!salary.trim().isEmpty() && salary != null) {
+            String query2 = "AND ae.salary LIKE '%" + salary + "%' ";
+            sql = sql + query2;
+
+        }
+         if (!job_start.trim().isEmpty() && job_start != null) {
+            String query2 = "AND ae.job_start LIKE '%" + job_start + "%' ";
+            sql = sql + query2;
+
+        }
+         if (!position.trim().isEmpty() && position != null) {
+            String query2 = "AND p.`name` LIKE '%" + position + "%' ";
+            sql = sql + query2;
+
+        }
+
+        try (Connection con = connection()) {
+            PreparedStatement stm = con.prepareStatement(sql);
+            stm.execute();
+            ResultSet rs = stm.getResultSet();
+            while (rs.next()) {
+                Employee u = getEmployee(rs);
+                list.add(u);
+
+            }
+        } catch (Exception e) {
+            e.getMessage();
+        }
+        return list;
+
     }
 
 }

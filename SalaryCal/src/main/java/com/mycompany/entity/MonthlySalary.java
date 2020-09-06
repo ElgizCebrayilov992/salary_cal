@@ -15,21 +15,23 @@ import java.util.Objects;
 public class MonthlySalary {
     private int id;
     private Employee employe_id;
-    private double total_bonus;
-    private double total_advance;
-    private double total_penalty;
-    private double total_taken_daily_salary;
-    private double employee_debit;
-    private double company_debit;
+    private Double total_bonus;
+    private Double total_advance;
+    private Double total_penalty;
+    private Double total_taken_daily_salary;
+    private Double employee_debit;
+    private Double company_debit;
     private Date about_date;
-    private double net_salary;
+    private Double net_salary;
     private int status;
-    private double give_salary;
+    private Double give_salary;
+    private Double send_salary;
+    private Date send_date;
 
     public MonthlySalary() {
     }
 
-    public MonthlySalary(int id, Employee employe_id, double total_bonus, double total_advance, double total_penalty, double total_taken_daily_salary, double employee_debit, double company_debit, Date about_date, double net_salary, int status, double give_salary) {
+    public MonthlySalary(int id, Employee employe_id, Double total_bonus, Double total_advance, Double total_penalty, Double total_taken_daily_salary, Double employee_debit, Double company_debit, Date about_date, Double net_salary, int status, Double give_salary, Double send_salary, Date send_date) {
         this.id = id;
         this.employe_id = employe_id;
         this.total_bonus = total_bonus;
@@ -42,10 +44,12 @@ public class MonthlySalary {
         this.net_salary = net_salary;
         this.status = status;
         this.give_salary = give_salary;
+        this.send_salary = send_salary;
+        this.send_date = send_date;
     }
 
   
-
+ 
     public int getId() {
         return id;
     }
@@ -62,51 +66,51 @@ public class MonthlySalary {
         this.employe_id = employe_id;
     }
 
-    public double getTotal_bonus() {
+    public Double getTotal_bonus() {
         return total_bonus;
     }
 
-    public void setTotal_bonus(double total_bonus) {
+    public void setTotal_bonus(Double total_bonus) {
         this.total_bonus = total_bonus;
     }
 
-    public double getTotal_advance() {
+    public Double getTotal_advance() {
         return total_advance;
     }
 
-    public void setTotal_advance(double total_advance) {
+    public void setTotal_advance(Double total_advance) {
         this.total_advance = total_advance;
     }
 
-    public double getTotal_penalty() {
+    public Double getTotal_penalty() {
         return total_penalty;
     }
 
-    public void setTotal_penalty(double total_penalty) {
+    public void setTotal_penalty(Double total_penalty) {
         this.total_penalty = total_penalty;
     }
 
-    public double getTotal_taken_daily_salary() {
+    public Double getTotal_taken_daily_salary() {
         return total_taken_daily_salary;
     }
 
-    public void setTotal_taken_daily_salary(double total_taken_daily_salary) {
+    public void setTotal_taken_daily_salary(Double total_taken_daily_salary) {
         this.total_taken_daily_salary = total_taken_daily_salary;
     }
 
-    public double getEmployee_debit() {
+    public Double getEmployee_debit() {
         return employee_debit;
     }
 
-    public void setEmployee_debit(double employee_debit) {
+    public void setEmployee_debit(Double employee_debit) {
         this.employee_debit = employee_debit;
     }
 
-    public double getCompany_debit() {
+    public Double getCompany_debit() {
         return company_debit;
     }
 
-    public void setCompany_debit(double company_debit) {
+    public void setCompany_debit(Double company_debit) {
         this.company_debit = company_debit;
     }
 
@@ -118,11 +122,11 @@ public class MonthlySalary {
         this.about_date = about_date;
     }
 
-    public double getNet_salary() {
+    public Double getNet_salary() {
         return net_salary;
     }
 
-    public void setNet_salary(double net_salary) {
+    public void setNet_salary(Double net_salary) {
         this.net_salary = net_salary;
     }
 
@@ -134,29 +138,47 @@ public class MonthlySalary {
         this.status = status;
     }
 
-    public double getGive_salary() {
+    public Double getGive_salary() {
         return give_salary;
     }
 
-    public void setGive_salary(double give_salary) {
+    public void setGive_salary(Double give_salary) {
         this.give_salary = give_salary;
+    }
+
+    public Double getSend_salary() {
+        return send_salary;
+    }
+
+    public void setSend_salary(Double send_salary) {
+        this.send_salary = send_salary;
+    }
+
+    public Date getSend_date() {
+        return send_date;
+    }
+
+    public void setSend_date(Date send_date) {
+        this.send_date = send_date;
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
+        int hash = 3;
         hash = 97 * hash + this.id;
         hash = 97 * hash + Objects.hashCode(this.employe_id);
-        hash = 97 * hash + (int) (Double.doubleToLongBits(this.total_bonus) ^ (Double.doubleToLongBits(this.total_bonus) >>> 32));
-        hash = 97 * hash + (int) (Double.doubleToLongBits(this.total_advance) ^ (Double.doubleToLongBits(this.total_advance) >>> 32));
-        hash = 97 * hash + (int) (Double.doubleToLongBits(this.total_penalty) ^ (Double.doubleToLongBits(this.total_penalty) >>> 32));
-        hash = 97 * hash + (int) (Double.doubleToLongBits(this.total_taken_daily_salary) ^ (Double.doubleToLongBits(this.total_taken_daily_salary) >>> 32));
-        hash = 97 * hash + (int) (Double.doubleToLongBits(this.employee_debit) ^ (Double.doubleToLongBits(this.employee_debit) >>> 32));
-        hash = 97 * hash + (int) (Double.doubleToLongBits(this.company_debit) ^ (Double.doubleToLongBits(this.company_debit) >>> 32));
+        hash = 97 * hash + Objects.hashCode(this.total_bonus);
+        hash = 97 * hash + Objects.hashCode(this.total_advance);
+        hash = 97 * hash + Objects.hashCode(this.total_penalty);
+        hash = 97 * hash + Objects.hashCode(this.total_taken_daily_salary);
+        hash = 97 * hash + Objects.hashCode(this.employee_debit);
+        hash = 97 * hash + Objects.hashCode(this.company_debit);
         hash = 97 * hash + Objects.hashCode(this.about_date);
-        hash = 97 * hash + (int) (Double.doubleToLongBits(this.net_salary) ^ (Double.doubleToLongBits(this.net_salary) >>> 32));
+        hash = 97 * hash + Objects.hashCode(this.net_salary);
         hash = 97 * hash + this.status;
-        hash = 97 * hash + (int) (Double.doubleToLongBits(this.give_salary) ^ (Double.doubleToLongBits(this.give_salary) >>> 32));
+        hash = 97 * hash + Objects.hashCode(this.give_salary);
+        hash = 97 * hash + Objects.hashCode(this.send_salary);
+        hash = 97 * hash + Objects.hashCode(this.send_date);
         return hash;
     }
 
@@ -175,37 +197,43 @@ public class MonthlySalary {
         if (this.id != other.id) {
             return false;
         }
-        if (Double.doubleToLongBits(this.total_bonus) != Double.doubleToLongBits(other.total_bonus)) {
-            return false;
-        }
-        if (Double.doubleToLongBits(this.total_advance) != Double.doubleToLongBits(other.total_advance)) {
-            return false;
-        }
-        if (Double.doubleToLongBits(this.total_penalty) != Double.doubleToLongBits(other.total_penalty)) {
-            return false;
-        }
-        if (Double.doubleToLongBits(this.total_taken_daily_salary) != Double.doubleToLongBits(other.total_taken_daily_salary)) {
-            return false;
-        }
-        if (Double.doubleToLongBits(this.employee_debit) != Double.doubleToLongBits(other.employee_debit)) {
-            return false;
-        }
-        if (Double.doubleToLongBits(this.company_debit) != Double.doubleToLongBits(other.company_debit)) {
-            return false;
-        }
-        if (Double.doubleToLongBits(this.net_salary) != Double.doubleToLongBits(other.net_salary)) {
-            return false;
-        }
         if (this.status != other.status) {
-            return false;
-        }
-        if (Double.doubleToLongBits(this.give_salary) != Double.doubleToLongBits(other.give_salary)) {
             return false;
         }
         if (!Objects.equals(this.employe_id, other.employe_id)) {
             return false;
         }
+        if (!Objects.equals(this.total_bonus, other.total_bonus)) {
+            return false;
+        }
+        if (!Objects.equals(this.total_advance, other.total_advance)) {
+            return false;
+        }
+        if (!Objects.equals(this.total_penalty, other.total_penalty)) {
+            return false;
+        }
+        if (!Objects.equals(this.total_taken_daily_salary, other.total_taken_daily_salary)) {
+            return false;
+        }
+        if (!Objects.equals(this.employee_debit, other.employee_debit)) {
+            return false;
+        }
+        if (!Objects.equals(this.company_debit, other.company_debit)) {
+            return false;
+        }
         if (!Objects.equals(this.about_date, other.about_date)) {
+            return false;
+        }
+        if (!Objects.equals(this.net_salary, other.net_salary)) {
+            return false;
+        }
+        if (!Objects.equals(this.give_salary, other.give_salary)) {
+            return false;
+        }
+        if (!Objects.equals(this.send_salary, other.send_salary)) {
+            return false;
+        }
+        if (!Objects.equals(this.send_date, other.send_date)) {
             return false;
         }
         return true;
@@ -213,10 +241,14 @@ public class MonthlySalary {
 
     @Override
     public String toString() {
-        return "MonthlySalary{" + "id=" + id + ", employe_id=" + employe_id + ", total_bonus=" + total_bonus + ", total_advance=" + total_advance + ", total_penalty=" + total_penalty + ", total_taken_daily_salary=" + total_taken_daily_salary + ", employee_debit=" + employee_debit + ", company_debit=" + company_debit + ", about_date=" + about_date + ", net_salary=" + net_salary + ", status=" + status + ", give_salary=" + give_salary + '}';
+        return "MonthlySalary{" + "id=" + id + ", employe_id=" + employe_id + ", total_bonus=" + total_bonus + ", total_advance=" + total_advance + ", total_penalty=" + total_penalty + ", total_taken_daily_salary=" + total_taken_daily_salary + ", employee_debit=" + employee_debit + ", company_debit=" + company_debit + ", about_date=" + about_date + ", net_salary=" + net_salary + ", status=" + status + ", give_salary=" + give_salary + ", send_salary=" + send_salary + ", send_date=" + send_date + '}';
     }
+    
+    
 
-
+  
+  
+  
     
     
 }

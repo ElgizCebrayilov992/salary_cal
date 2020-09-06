@@ -28,7 +28,7 @@ public class PayTypeDaoImp extends AbstractDao implements PayTypeDaoInter {
 
         int id = rs.getInt("id");
         String type = rs.getString("type");
-        String value = rs.getString("value  ");
+        String value = rs.getString("value");
         int view = rs.getInt("view");
         int status = rs.getInt("status");
 

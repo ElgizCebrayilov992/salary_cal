@@ -27,7 +27,11 @@ public interface VergiEmpDaoInter {
     public VergiEmp SearchById(int id);
     
     public VergiEmp SearchEmployeById(int id);
+    
+    public VergiEmp SearchEmployeByIdAndVergiId(int empId,int vergiId);
 
     public List<VergiEmp> SearchByFullName(String fullName);
+    
+    public List<VergiEmp> SearchByVergi(int idV);
 
 }
